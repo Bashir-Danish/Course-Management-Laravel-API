@@ -127,7 +127,6 @@
                       <!-- Registrations Table -->
                       <div class="card-body border-top">
                           <div class="table-responsive" id="registrationsTable">
-                              <!-- Table content will be loaded via AJAX -->
                           </div>
                       </div>
                   </div>
@@ -148,12 +147,10 @@
     <!--========================================================================================================================== -->
 
     <script>
-    // Load courses on page load
     document.addEventListener('DOMContentLoaded', function() {
         loadRegistrations();
     });
 
-    // Update course fee when course is selected
     document.getElementById('course_id').addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         console.log('Selected course time slots:', {
@@ -166,19 +163,15 @@
         document.getElementById('course_fee').textContent = courseFee;
         document.getElementById('fees_paid').max = courseFee;
 
-        // Update time slots
         timeSlotSelect.innerHTML = '<option value="">Select Time</option>';
         timeSlotSelect.disabled = !this.value;
         
         if (this.value) {
             try {
-                // Get the time slots from the data attribute and parse it
                 let timeSlots = selectedOption.dataset.timeSlots;
                 
-                // If the time slots are double-encoded JSON, parse it twice
                 try {
                     timeSlots = JSON.parse(timeSlots);
-                    // If it's still a string (due to double encoding), parse again
                     if (typeof timeSlots === 'string') {
                         timeSlots = JSON.parse(timeSlots);
                     }
@@ -187,7 +180,6 @@
                     timeSlots = [];
                 }
 
-                // Ensure we have an array
                 if (Array.isArray(timeSlots)) {
                     timeSlots.forEach(slot => {
                         const formattedSlot = slot.charAt(0).toUpperCase() + slot.slice(1);
@@ -204,7 +196,6 @@
         }
     });
 
-    // Add the checkInputs function
     function checkInputs() {
         let isValid = true;
         const form = document.getElementById('registrationForm');
@@ -215,12 +206,10 @@
             'time_slot': 'Please select a time slot'
         };
         
-        // Only require fees_paid for new registrations
         if (!isEdit) {
             requiredFields['fees_paid'] = 'Please enter payment amount';
         }
 
-        // Check each required field
         Object.keys(requiredFields).forEach(fieldId => {
             const field = document.getElementById(fieldId);
             const value = field.value.trim();
@@ -234,7 +223,6 @@
             }
         });
 
-        // Validate fees if provided (even during update)
         const feesPaidInput = document.getElementById('fees_paid');
         const feesPaidValue = feesPaidInput.value.trim();
         if (feesPaidValue) {
@@ -251,14 +239,12 @@
         return isValid;
     }
 
-    // Add input event listeners to clear error styling
     document.querySelectorAll('#registrationForm input, #registrationForm select').forEach(element => {
         element.addEventListener('input', function() {
             this.style.border = '1px solid #ced4da';
         });
     });
 
-    // Add this new function to refresh payment summary
     async function refreshPaymentSummary() {
         try {
             const response = await fetch(`{{ route('students.show', $student->id) }}`);
@@ -266,16 +252,14 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
             
-            // Get the new summary boxes
             const newSummary = doc.querySelector('.payment-summary');
-            // Update the existing summary
+           
             document.querySelector('.payment-summary').innerHTML = newSummary.innerHTML;
         } catch (error) {
             console.error('Error refreshing payment summary:', error);
         }
     }
 
-    // Handle registration form submission
     document.getElementById('registrationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         if (checkInputs()) {
@@ -296,15 +280,12 @@
                 _token: '{{ csrf_token() }}'
             };
 
-            // Only include fees_paid if it has a value during update
             const feesPaidValue = document.getElementById('fees_paid').value;
             if (this.dataset.editingId) {
-                // If updating and fees_paid has a value, include it
                 if (feesPaidValue.trim()) {
                     formData.fees_paid = parseFloat(feesPaidValue);
                 }
             } else {
-                // For new registrations, fees_paid is required
                 formData.fees_paid = parseFloat(feesPaidValue || 0);
             }
 
@@ -340,14 +321,12 @@
                     await loadRegistrations();
                     await refreshPaymentSummary();
                     
-                    // Reset form state
                     document.getElementById('time_slot').disabled = true;
                     document.getElementById('time_slot').innerHTML = '<option value="">First select a course</option>';
                     document.getElementById('course_fee').textContent = '0.00';
                     document.getElementById('fees_paid').placeholder = 'Enter payment amount';
                     document.querySelector('#registrationForm button[type="submit"]').textContent = 'Register Course';
                 } else {
-                    // Show validation errors if they exist
                     if (data.errors) {
                         const errorMessages = Object.values(data.errors).flat();
                         errorMessages.forEach(message => {
@@ -364,7 +343,6 @@
         }
     });
 
-    // Load registrations table
     async function loadRegistrations() {
         try {
             const response = await fetch(`{{ route("registrations.student", $student->id) }}`);
@@ -376,7 +354,6 @@
         }
     }
 
-    // Delete registration
     async function deleteRegistration(id) {
         if (!confirm('Are you sure you want to delete this registration?')) return;
 
@@ -404,27 +381,20 @@
         }
     }
 
-    // Edit registration (load data into form)
     function editRegistration(registration) {
-        // Store registration ID for update
         document.getElementById('registrationForm').dataset.editingId = registration.id;
         
-        // Set course and trigger change event to load time slots
         const courseSelect = document.getElementById('course_id');
         courseSelect.value = registration.course_id;
         
-        // Trigger the change event manually to load time slots
         const changeEvent = new Event('change');
         courseSelect.dispatchEvent(changeEvent);
         
-        // Wait for time slots to load then set the selected time slot
         setTimeout(() => {
             const timeSlotSelect = document.getElementById('time_slot');
             let timeSlot;
             try {
-                // Handle different time_slot formats
                 if (typeof registration.time_slot === 'string') {
-                    // Clean up the time slot string
                     timeSlot = JSON.parse(registration.time_slot)[0];
                     timeSlot = timeSlot.replace(/[\[\]"]/g, '');
                 } else if (Array.isArray(registration.time_slot)) {
@@ -434,7 +404,6 @@
                     timeSlot = registration.time_slot;
                 }
                 
-                // Find and select the matching option
                 const options = Array.from(timeSlotSelect.options);
                 const matchingOption = options.find(option => {
                     const cleanOptionValue = option.value.replace(/[\[\]"]/g, '');
@@ -447,27 +416,22 @@
             } catch (e) {
                 console.error('Error parsing time slot:', e);
             }
-        }, 300); // Increased timeout to ensure options are loaded
+        }, 300); 
 
-        // Clear and update fees_paid field
         const feesPaidInput = document.getElementById('fees_paid');
         feesPaidInput.value = '';
-        feesPaidInput.required = false; // Remove required attribute for updates
+        feesPaidInput.required = false; 
         feesPaidInput.placeholder = `Current paid: $${registration.fees_paid} (optional)`;
         
-        // Update the course fee display
         document.getElementById('course_fee').textContent = registration.fees_total.toFixed(2);
         
-        // Change button text to indicate update mode
         const submitButton = document.querySelector('#registrationForm button[type="submit"]');
         submitButton.textContent = 'Update Registration';
         
-        // Scroll to form
         document.getElementById('registrationForm').scrollIntoView({ behavior: 'smooth' });
     }
 
     function showNotification(message, type = 'success') {
-        // Get or create the notification container
         let container = document.getElementById('notification-container');
         if (!container) {
             container = document.createElement('div');
@@ -475,26 +439,21 @@
             document.body.appendChild(container);
         }
 
-        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         
-        // Create message text
         const messageText = document.createElement('span');
         messageText.textContent = message;
         
-        // Create close button
         const closeButton = document.createElement('button');
         closeButton.className = 'notification-close';
         closeButton.innerHTML = '&times;';
         closeButton.onclick = () => notification.remove();
         
-        // Assemble notification
         notification.appendChild(messageText);
         notification.appendChild(closeButton);
         container.appendChild(notification);
         
-        // Auto remove after 3 seconds
         setTimeout(() => {
             if (notification.parentElement) {
                 notification.remove();
@@ -502,7 +461,6 @@
         }, 3000);
     }
 
-    // Add this debug code temporarily to check the data format
     document.addEventListener('DOMContentLoaded', function() {
         const courseSelect = document.getElementById('course_id');
         Array.from(courseSelect.options).forEach(option => {
@@ -612,7 +570,6 @@
         border-top: 1px solid #dee2e6;
     }
 
-    /* New styles for the form layout */
     #registrationForm {
         gap: 10px;
     }
@@ -639,7 +596,6 @@
         margin-right: 0.5rem;
     }
 
-    /* Adjust label and small text size */
     #registrationForm label,
     #registrationForm small {
         font-size: 0.8rem;
@@ -648,7 +604,6 @@
         justify-content: center;
     }
 
-    /* Registration form styles */
     .registration-form {
         background-color: #f8f9fa;
         padding: 20px;
@@ -691,7 +646,6 @@
         color: #333;
     }
 
-    /* Payment Summary Styles */
     .payment-summary {
         border-left: 1px solid #eee;
         padding-left: 15px;
@@ -729,7 +683,6 @@
         font-size: 1rem;
     }
 
-    /* Adjust button width */
     .btn-primary.btn-sm {
         width: 100%;
         white-space: nowrap;

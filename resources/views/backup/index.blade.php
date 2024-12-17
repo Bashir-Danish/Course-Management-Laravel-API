@@ -112,7 +112,7 @@
                                      id="backup_name" 
                                      name="backup_name" 
                                      required 
-                                     value="backup_{{ date('Y-m-d_H-i-s') }}"
+                                     value="backup_{{ date('Y-m-d') }}"
                                      placeholder="Enter backup name">
                           </div>
                           
