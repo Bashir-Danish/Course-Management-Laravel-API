@@ -40,7 +40,6 @@
             </div>
             
             <div class="table123_section">
-                <!-- Table content will be loaded here via AJAX -->
             </div>
            
         </div>
@@ -109,7 +108,6 @@
         }, 3000);
     }
 
-    // Handle search with debounce
     let searchTimeout;
     document.getElementById('tx').addEventListener('keyup', function() {
         clearTimeout(searchTimeout);
@@ -124,7 +122,6 @@
         }
     });
 
-    // Handle pagination clicks
     document.addEventListener('click', function(e) {
         if (e.target.matches('.pagination a')) {
             e.preventDefault();
@@ -162,7 +159,6 @@
         window.location.href = `{{ url('students') }}/${id}/edit`;
     }
 
-    // Initial load
     loadStudents();
     </script>
 

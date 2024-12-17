@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
   <head>
-     <!--================================================= Head Part ==================================================== -->
      @include('head')
-     <!--================================================================================================================ -->
      <script>
-     // Prevent WOW.js error
      window.WOW = function() {
          return {
              init: function() {}
@@ -15,11 +12,8 @@
   </head>
 
   <body>
-    <!-- ================================================ Left Sidebar ================================================================ -->
       @include('sidebar')
-    <!-- ===============================================================================================================================-->
 
-    <!-- ========================================== Navbar Part  And Main Section ================================================-->
     <div class="all-content-wrapper">
       <div class="container-fluid">
         <div class="row">
@@ -31,12 +25,9 @@
         </div>
       </div>
 
-      <!-- header section -->
       @include('header')
-      <!-- Mobile Menu start -->
       @include('Mobile_menu')
         
-      <!-- =================================== The Main Part ============================================== -->
       <hr>
       <div class="container-fluid">
           <div class="row">
@@ -44,7 +35,6 @@
                   <div class="card">
                       <div class="info-row">
                           <div class="row w-100">
-                              <!-- Student Info Column -->
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                   <div class="student-info">
                                       <h3>{{ $student->first_name }} {{ $student->last_name }}</h3>
@@ -69,7 +59,6 @@
                                   </div>
                               </div>
                               
-                              <!-- Payment Summary Column -->
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                   <div class="payment-summary">
                                       <div class="summary-boxes">

@@ -22,12 +22,10 @@
     </div>
     
     <div class="table123_section">
-        <!-- Table content will be loaded here via AJAX -->
     </div>
 </div>
 
 <script>
-// Function to load courses table content
 function loadCourses(url) {
     url = url || '{{ route("courses.index") }}';
     fetch(url, {
@@ -60,7 +58,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Handle search with debounce
 let searchTimeout;
 document.getElementById('tx').addEventListener('keyup', function() {
     clearTimeout(searchTimeout);
@@ -75,7 +72,6 @@ document.getElementById('tx').addEventListener('keyup', function() {
     }
 });
 
-// Handle pagination clicks
 document.addEventListener('click', function(e) {
     if (e.target.matches('.pagination a')) {
         e.preventDefault();
@@ -112,7 +108,6 @@ function editCourse(id) {
     window.location.href = `{{ url('courses') }}/${id}/edit`;
 }
 
-// Initial load
 loadCourses();
 </script>
 

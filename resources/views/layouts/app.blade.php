@@ -60,7 +60,6 @@
         @include('Footer')
     </div>
 
-    <!-- Additional Scripts -->
     <script>
         new WOW().init();
     </script>

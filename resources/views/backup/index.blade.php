@@ -143,17 +143,13 @@
             const button = $('#backupBtn');
             const alertContainer = $('#alert-container');
             
-            // Clear previous alerts
             alertContainer.empty();
             
-            // Disable button and show loading
             button.prop('disabled', true);
             button.addClass('loading');
             
-            // Create form data
             const formData = new FormData(this);
-            
-            // Make the AJAX request
+        
             $.ajax({
                 url: form.attr('action'),
                 type: 'POST',
@@ -161,11 +157,9 @@
                 processData: false,
                 contentType: false,
                 success: function(response, status, xhr) {
-                    // Create a blob from the response
                     const blob = new Blob([response], { type: 'application/sql' });
                     const url = window.URL.createObjectURL(blob);
                     
-                    // Create temporary link and trigger download
                     const link = document.createElement('a');
                     const filename = xhr.getResponseHeader('Content-Disposition')?.split('filename=')[1]?.replace(/['"]/g, '') || 'backup.sql';
                     
@@ -175,10 +169,8 @@
                     link.click();
                     document.body.removeChild(link);
                     
-                    // Clean up
                     window.URL.revokeObjectURL(url);
                     
-                    // Show success message
                     showAlert('success', 'Backup generated successfully!');
                 },
                 error: function(xhr) {
@@ -192,7 +184,6 @@
                     showAlert('danger', errorMessage);
                 },
                 complete: function() {
-                    // Re-enable button and hide loading
                     button.prop('disabled', false);
                     button.removeClass('loading');
                 }

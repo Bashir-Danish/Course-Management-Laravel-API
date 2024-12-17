@@ -153,7 +153,6 @@
 
             if (!response.ok) {
                 if (response.status === 422) {
-                    // Handle validation errors
                     showNotification('Please check the form for errors', 'danger');
                 } else {
                     throw new Error(data.message || 'Error processing student');

@@ -61,7 +61,6 @@
     <!--========================================================================================================================== -->
 
     <script>
-    // Load departments with AJAX pagination
     function loadDepartments(url) {
         url = url || '{{ route("departments.index") }}';
         fetch(url, {
@@ -75,10 +74,8 @@
         });
     }
 
-    // Initial load
     loadDepartments();
 
-    // Handle pagination clicks
     document.addEventListener('click', function(e) {
         if (e.target.matches('.pagination a')) {
             e.preventDefault();
@@ -86,19 +83,17 @@
         }
     });
 
-    // Handle search with debounce
     let searchTimeout;
     document.getElementById('tx').addEventListener('keyup', function() {
         clearTimeout(searchTimeout);
         const searchText = this.value.toLowerCase();
         
-        // Only search if 3 or more characters
         if (searchText.length >= 3 || searchText.length === 0) {
             searchTimeout = setTimeout(() => {
                 const url = new URL('{{ route("departments.index") }}');
                 url.searchParams.set('search', searchText);
                 loadDepartments(url);
-            }, 500); // Wait 500ms after last keypress before searching
+            }, 500); 
         }
     });
 
@@ -115,7 +110,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Just reload the table without notification
                     loadDepartments();
                 } else {
                     throw new Error(data.message || 'Error deleting department');
@@ -127,7 +121,6 @@
         }
     }
 
-    // Add edit function back
     function editDepartment(id) {
         window.location.href = `{{ url('departments') }}/${id}/edit`;
     }

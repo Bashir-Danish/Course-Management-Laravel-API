@@ -103,19 +103,17 @@
             e.preventDefault();
             
             if(confirm('Are you sure you want to logout?')) {
-                // Create a form dynamically
+             
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '{{ route("logout") }}';
                 
-                // Add CSRF token
                 const csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = '_token';
                 csrfToken.value = '{{ csrf_token() }}';
                 form.appendChild(csrfToken);
                 
-                // Add to document and submit
                 document.body.appendChild(form);
                 form.submit();
             }

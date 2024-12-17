@@ -5,16 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile Modal</title>
   <style>
-    /* Basic styles for the button and modal */
-    /*
-    .open-modal-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    */
+  
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       top: 50%;
       left: 50%;
@@ -28,7 +21,7 @@
     }
 
     .modal-overlay {
-      display: none; /* Hidden by default */
+      display: none; 
       position: fixed;
       top: 0;
       left: 0;
@@ -110,7 +103,6 @@
   }
 
   function saveProfile() {
-    // Placeholder for saving changes, e.g., send data to the server
     alert("Profile updated successfully!");
     closeModal();
   }

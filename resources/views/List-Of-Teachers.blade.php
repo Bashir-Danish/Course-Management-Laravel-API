@@ -138,7 +138,6 @@
     <!--========================================================================================================================== -->
 
     <script>
-    // Function to load teachers table content
     function loadTeachers(url) {
         url = url || '{{ route("teachers.index") }}';
         fetch(url, {
@@ -152,7 +151,6 @@
         });
     }
 
-    // Handle search with debounce
     let searchTimeout;
     document.getElementById('tx').addEventListener('keyup', function() {
         clearTimeout(searchTimeout);
@@ -167,7 +165,6 @@
         }
     });
 
-    // Handle pagination clicks
     document.addEventListener('click', function(e) {
         if (e.target.matches('.pagination a')) {
             e.preventDefault();
@@ -188,7 +185,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    loadTeachers(); // Reload the table instead of full page
+                    loadTeachers();
                 } else {
                     throw new Error(data.message || 'Error deleting teacher');
                 }
@@ -203,7 +200,6 @@
         window.location.href = `{{ url('teachers') }}/${id}/edit`;
     }
 
-    // Initial load
     loadTeachers();
     </script>
 
