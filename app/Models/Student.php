@@ -18,8 +18,8 @@ class Student extends Model
         'dob'
     ];
 
-    protected $casts = [
-        'dob' => 'date'
+    protected $dates = [
+        'dob'
     ];
 
     /**

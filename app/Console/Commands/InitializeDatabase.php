@@ -170,7 +170,7 @@ class InitializeDatabase extends Command
                 $table->decimal('fees_total', 10, 2);
                 $table->decimal('fees_paid', 10, 2);
                 $table->json('time_slot');
-                $table->enum('status', ['Active', 'Completed', 'Cancelled']);
+                $table->enum('status', ['Unpaid', 'Paid', 'Cancelled']);
                 $table->timestamps();
             });
             $this->info('Created registrations table');

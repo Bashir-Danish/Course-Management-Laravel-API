@@ -4,202 +4,138 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
-use App\Http\Resources\DepartmentResource;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
-    /**
-     * Display a listing of departments.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $departments = Department::latest()->paginate(10);
-            return response()->json([
-                'status' => 'success',
-                'data' => DepartmentResource::collection($departments),
-                'meta' => [
-                    'total' => $departments->total(),
-                    'per_page' => $departments->perPage(),
-                    'current_page' => $departments->currentPage(),
-                    'last_page' => $departments->lastPage(),
-                ]
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to fetch departments: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch departments'
-            ], 500);
+        $query = Department::oldest();
+        
+        // Handle search
+        if ($request->has('search') && strlen($request->search) >= 3) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                  ->orWhere('description', 'like', "%{$searchTerm}%");
+            });
+            // Get all results without pagination when searching
+            $departments = $query->get();
+            $isPaginated = false;
+        } else {
+            // Use pagination when not searching
+            $departments = $query->paginate(10);
+            $isPaginated = true;
         }
+        
+        if ($request->ajax()) {
+            return view('departments.table', compact('departments', 'isPaginated'))->render();
+        }
+        
+        return view('List-Of-Departments', compact('departments', 'isPaginated'));
     }
 
-    /**
-     * Store a newly created department.
-     */
-    public function store(Request $request)
+    public function create()
     {
-        try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Check if department with same name already exists
-            if (Department::where('name', $request->name)->exists()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Department with this name already exists'
-                ], 409);
-            }
-
-            $department = Department::create($validator->validated());
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Department created successfully',
-                'data' => new DepartmentResource($department)
-            ], 201);
-        } catch (\Exception $e) {
-            Log::error('Failed to create department: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to create department'
-            ], 500);
-        }
+        return view('Add-Department');
     }
 
-    /**
-     * Display the specified department.
-     */
-    public function show($id)
+    public function edit($id)
     {
-        try {
-            $department = Department::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'data' => new DepartmentResource($department)
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to fetch department: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Department not found'
-            ], 404);
-        }
+        $department = Department::findOrFail($id);
+        return view('Add-Department', compact('department'));
     }
 
-    /**
-     * Update the specified department.
-     */
-    public function update(Request $request, $id)
-    {
-        try {
-            $department = Department::findOrFail($id);
-
-            $validator = Validator::make($request->all(), [
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'nullable|string'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Check if department with same name already exists (excluding current department)
-            if (Department::where('name', $request->name)
-                ->where('id', '!=', $id)
-                ->exists()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Department with this name already exists'
-                ], 409);
-            }
-
-            $department->update($validator->validated());
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Department updated successfully',
-                'data' => new DepartmentResource($department)
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to update department: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update department'
-            ], 500);
-        }
-    }
-
-    /**
-     * Remove the specified department.
-     */
     public function destroy($id)
     {
         try {
             $department = Department::findOrFail($id);
-            
-            // Check if department has associated courses (if courses table exists)
-            if (Schema::hasTable('courses')) {
-                if ($department->courses()->exists()) {
-                    Log::warning("Cannot delete department ID {$id} - Has associated courses");
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Cannot delete department with associated courses',
-                        'details' => 'Please remove or reassign all courses before deleting this department'
-                    ], 409);
-                }
-            }
-
-            // Only check for teachers if the pivot table exists
-            if (Schema::hasTable('department_teacher')) {
-                if ($department->teachers()->exists()) {
-                    Log::warning("Cannot delete department ID {$id} - Has associated teachers");
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Cannot delete department with associated teachers',
-                        'details' => 'Please remove or reassign all teachers before deleting this department'
-                    ], 409);
-                }
-            }
-
-            // If no dependencies exist, proceed with deletion
             $department->delete();
-            Log::info("Department ID {$id} deleted successfully");
 
             return response()->json([
-                'status' => 'success',
+                'success' => true,
                 'message' => 'Department deleted successfully'
             ]);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            Log::error("Department not found with ID: {$id}");
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Department not found'
-            ], 404);
-
         } catch (\Exception $e) {
-            Log::error("Error deleting department {$id}: " . $e->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete department'
+                'success' => false,
+                'message' => 'Error deleting department'
+            ], 500);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'name' => [
+                    'required',
+                    'string',
+                    'min:2',
+                    'max:50',
+                    Rule::unique('departments', 'name'),
+                ],
+                'description' => 'required|string|min:4|max:500',
+            ], [
+                'name.unique' => 'This Department name already exists.',
+            ]);
+
+            $department = Department::create($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Department created successfully',
+                'department' => $department
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while creating the department'
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $department = Department::findOrFail($id);
+            
+            $validated = $request->validate([
+                'name' => [
+                    'required',
+                    'string',
+                    'min:2',
+                    'max:50',
+                    Rule::unique('departments', 'name')->ignore($department->id),
+                ],
+                'description' => 'required|string|min:4|max:500',
+            ], [
+                'name.unique' => 'This Department name already exists.',
+            ]);
+
+            $department->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Department updated successfully',
+                'department' => $department
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the department'
             ], 500);
         }
     }

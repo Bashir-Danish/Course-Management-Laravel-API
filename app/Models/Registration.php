@@ -10,8 +10,8 @@ class Registration extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
         'student_id',
+        'course_id',
         'registration_date',
         'fees_total',
         'fees_paid',
@@ -20,10 +20,10 @@ class Registration extends Model
     ];
 
     protected $casts = [
-        'registration_date' => 'date',
+        'time_slot' => 'array',
         'fees_total' => 'decimal:2',
         'fees_paid' => 'decimal:2',
-        'time_slot' => 'array'
+        'registration_date' => 'date'
     ];
 
     public function course()

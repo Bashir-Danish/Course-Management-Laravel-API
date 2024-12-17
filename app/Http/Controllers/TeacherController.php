@@ -3,245 +3,187 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teacher;
+use App\Models\Department;
 use Illuminate\Http\Request;
-use App\Http\Resources\TeacherResource;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Traits\Pagination;
 
 class TeacherController extends Controller
 {
-    use Pagination;
-
-    /**
-     * Display a listing of teachers.
-     */
     public function index(Request $request)
     {
-        try {
-            $pagination = $this->getPaginationParams($request);
-            
-            $teachers = Teacher::with('departments')
-                ->latest()
-                ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
-
-            return response()->json([
-                'status' => 'success',
-                'data' => TeacherResource::collection($teachers),
-                'meta' => [
-                    'total' => $teachers->total(),
-                    'per_page' => $teachers->perPage(),
-                    'current_page' => $teachers->currentPage(),
-                    'last_page' => $teachers->lastPage(),
-                    'from' => $teachers->firstItem(),
-                    'to' => $teachers->lastItem()
-                ]
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to fetch teachers: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch teachers'
-            ], 500);
+        $query = Teacher::with('departments')->oldest();
+        
+        if ($request->has('search') && strlen($request->search) >= 3) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('first_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('last_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('email', 'like', "%{$searchTerm}%")
+                  ->orWhere('phone', 'like', "%{$searchTerm}%")
+                  ->orWhere('salary', 'like', "%{$searchTerm}%");
+            });
+            $teachers = $query->get();
+            $isPaginated = false;
+        } else {
+            $teachers = $query->paginate(10);
+            $isPaginated = true;
         }
+        
+        if ($request->ajax()) {
+            return view('teachers.table', compact('teachers', 'isPaginated'))->render();
+        }
+        
+        return view('List-Of-Teachers', compact('teachers', 'isPaginated'));
     }
 
-    /**
-     * Store a newly created teacher.
-     */
+    public function create()
+    {
+        $departments = Department::all();
+        return view('Add-Teacher', compact('departments'));
+    }
+
     public function store(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'address' => 'required|string',
-                'phone' => 'nullable|string|max:20',
-                'email' => 'required|email|unique:teachers,email',
-                'gender' => ['required', Rule::in(['Male', 'Female'])],
+            $validated = $request->validate([
+                'first_name' => 'required|string|min:2|max:50',
+                'last_name' => 'required|string|min:2|max:50',
+                'email' => [
+                    'required',
+                    'email',
+                    Rule::unique('teachers', 'email'),
+                ],
+                'phone' => 'required|string|min:10|max:15',
+                'address' => 'required|string|min:5|max:200',
+                'department_ids' => 'required|array|min:1',
+                'department_ids.*' => 'exists:departments,id',
+                'gender' => 'required|in:male,female',
                 'salary' => 'required|numeric|min:0',
-                'department_ids' => 'required|array',
-                'department_ids.*' => 'exists:departments,id'
             ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+            \Log::info('Validated data:', $validated);
 
-            DB::beginTransaction();
-            try {
-                // Create teacher with validated data except department_ids
-                $teacher = Teacher::create($validator->validated());
+            $teacher = Teacher::create([
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'address' => $validated['address'],
+                'gender' => $validated['gender'],
+                'salary' => $validated['salary'],
+            ]);
 
-                // Attach departments
-                if ($request->has('department_ids')) {
-                    $teacher->departments()->attach($request->department_ids);
-                }
+            \Log::info('Teacher created:', $teacher->toArray());
 
-                DB::commit();
+            $teacher->departments()->attach($validated['department_ids']);
 
-                // Load departments for the response
-                $teacher->load('departments');
+            \Log::info('Departments attached');
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Teacher created successfully',
-                    'data' => new TeacherResource($teacher)
-                ], 201);
-
-            } catch (\Exception $e) {
-                DB::rollBack();
-                throw $e;
-            }
-
-        } catch (\Exception $e) {
-            Log::error('Failed to create teacher: ' . $e->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to create teacher',
-                'details' => config('app.debug') ? $e->getMessage() : null
+                'success' => true,
+                'message' => 'Teacher created successfully',
+                'teacher' => $teacher
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error:', $e->errors());
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Error creating teacher: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while creating the teacher'
             ], 500);
         }
     }
 
-    /**
-     * Display the specified teacher.
-     */
-    public function show($id)
+    public function edit($id)
     {
-        try {
-            $teacher = Teacher::with('departments')->findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'data' => new TeacherResource($teacher)
-            ]);
-        } catch (\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Teacher not found'
-            ], 404);
-        } catch (\Exception $e) {
-            Log::error('Failed to fetch teacher: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch teacher details'
-            ], 500);
-        }
+        $teacher = Teacher::with('departments')->findOrFail($id);
+        $departments = Department::all();
+        return view('Add-Teacher', compact('teacher', 'departments'));
     }
 
-    /**
-     * Update the specified teacher.
-     */
     public function update(Request $request, $id)
     {
         try {
             $teacher = Teacher::findOrFail($id);
-
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'sometimes|required|string|max:255',
-                'last_name' => 'sometimes|required|string|max:255',
-                'address' => 'sometimes|required|string',
-                'phone' => 'nullable|string|max:20',
-                'email' => 'sometimes|required|email|unique:teachers,email,' . $id,
-                'gender' => ['sometimes', 'required', Rule::in(['Male', 'Female'])],
-                'salary' => 'sometimes|required|numeric|min:0',
-                'department_ids' => 'sometimes|required|array',
-                'department_ids.*' => 'exists:departments,id'
+            
+            $validated = $request->validate([
+                'first_name' => 'required|string|min:2|max:50',
+                'last_name' => 'required|string|min:2|max:50',
+                'email' => [
+                    'required',
+                    'email',
+                    Rule::unique('teachers')->ignore($teacher->id),
+                ],
+                'phone' => 'required|string|min:10|max:15',
+                'address' => 'required|string|min:5|max:200',
+                'department_ids' => 'required|array|min:1',
+                'department_ids.*' => 'exists:departments,id',
+                'gender' => 'required|in:male,female',
+                'salary' => 'required|numeric|min:0',
             ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+            \Log::info('Update validated data:', $validated);
 
-            // Begin transaction
-            DB::beginTransaction();
+            $teacher->update([
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'address' => $validated['address'],
+                'gender' => $validated['gender'],
+                'salary' => $validated['salary'],
+            ]);
 
-            try {
-                // Get validated data
-                $validatedData = $validator->validated();
-                
-                // Remove department_ids from the data to be updated
-                if (isset($validatedData['department_ids'])) {
-                    unset($validatedData['department_ids']);
-                }
+            \Log::info('Teacher updated:', $teacher->toArray());
 
-                // Update teacher details
-                $teacher->update($validatedData);
+            // Sync departments
+            $teacher->departments()->sync($validated['department_ids']);
 
-                // Sync departments if provided
-                if ($request->has('department_ids')) {
-                    $teacher->departments()->sync($request->department_ids);
-                }
+            \Log::info('Departments synced');
 
-                DB::commit();
-
-                // Load departments for response
-                $teacher->load('departments');
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Teacher updated successfully',
-                    'data' => new TeacherResource($teacher)
-                ]);
-
-            } catch (\Exception $e) {
-                DB::rollBack();
-                throw $e;
-            }
-
-        } catch (\ModelNotFoundException $e) {
-            Log::error('Teacher not found: ' . $e->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Teacher not found'
-            ], 404);
+                'success' => true,
+                'message' => 'Teacher updated successfully',
+                'teacher' => $teacher->load('departments')
+            ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Update validation error:', $e->errors());
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            Log::error('Failed to update teacher: ' . $e->getMessage());
+            \Log::error('Error updating teacher: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update teacher',
-                'details' => config('app.debug') ? $e->getMessage() : null
+                'success' => false,
+                'message' => 'An error occurred while updating the teacher'
             ], 500);
         }
     }
 
-    /**
-     * Remove the specified teacher.
-     */
     public function destroy($id)
     {
         try {
             $teacher = Teacher::findOrFail($id);
-            
-            // Detach all departments before deleting
-            $teacher->departments()->detach();
             $teacher->delete();
 
             return response()->json([
-                'status' => 'success',
+                'success' => true,
                 'message' => 'Teacher deleted successfully'
             ]);
-        } catch (\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Teacher not found'
-            ], 404);
         } catch (\Exception $e) {
-            Log::error('Failed to delete teacher: ' . $e->getMessage());
             return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete teacher'
+                'success' => false,
+                'message' => 'Error deleting teacher'
             ], 500);
         }
     }

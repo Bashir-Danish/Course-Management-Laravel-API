@@ -93,8 +93,14 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                 if ($isConsole) {
                     echo "Tables created successfully!\n";
                 }
+
+                // Create demo admin if not exists
+                $this->createDemoAdmin();
             } else if ($isConsole) {
                 echo "All required tables exist.\n";
+                
+                // Check if demo admin exists, if not create it
+                $this->createDemoAdmin();
             }
 
             if ($isConsole) {
@@ -137,9 +143,10 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->id();
                     $table->string('first_name');
                     $table->string('last_name');
+                    $table->string('email')->unique();
                     $table->string('address')->nullable();
                     $table->string('phone')->nullable();
-                    $table->enum('gender', ['Male', 'Female']);
+                    $table->enum('gender', ['male', 'female']);
                     $table->decimal('salary', 10, 2);
                     $table->timestamps();
                 });
@@ -147,9 +154,9 @@ class DatabaseSetupServiceProvider extends ServiceProvider
 
             case 'teacher_departments':
                 Schema::create('teacher_departments', function (Blueprint $table) {
+                    $table->id();
                     $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
                     $table->foreignId('department_id')->constrained()->onDelete('cascade');
-                    $table->primary(['teacher_id', 'department_id']);
                     $table->timestamps();
                 });
                 break;
@@ -175,7 +182,6 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->string('address')->nullable();
                     $table->string('phone')->nullable();
                     $table->date('dob');
-                    $table->date('enrolls_date');
                     $table->timestamps();
                 });
                 break;
@@ -189,7 +195,7 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->decimal('fees_total', 10, 2);
                     $table->decimal('fees_paid', 10, 2);
                     $table->json('time_slot');
-                    $table->enum('status', ['Active', 'Completed', 'Cancelled']);
+                    $table->enum('status', ['Unpaid', 'Paid', 'Cancelled']);
                     $table->timestamps();
                 });
                 break;
@@ -249,6 +255,38 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->timestamps();
                 });
                 break;
+        }
+    }
+
+    private function createDemoAdmin()
+    {
+        try {
+            $adminExists = DB::table('admins')
+                ->where('email', 'admin@admin.com')
+                ->exists();
+
+            if (!$adminExists) {
+                DB::table('admins')->insert([
+                    'first_name' => 'Admin',
+                    'last_name' => 'User',
+                    'email' => 'admin@admin.com',
+                    'password' => bcrypt('admin123'), 
+                    'role' => 'super_admin',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+
+                if (App::runningInConsole()) {
+                    echo "Demo admin created successfully!\n";
+                    echo "Email: admin@admin.com\n";
+                    echo "Password: admin123\n";
+                }
+            }
+        } catch (\Exception $e) {
+            if (App::runningInConsole()) {
+                echo "Error creating demo admin: " . $e->getMessage() . "\n";
+            }
+            Log::error("Error creating demo admin: " . $e->getMessage());
         }
     }
 }
