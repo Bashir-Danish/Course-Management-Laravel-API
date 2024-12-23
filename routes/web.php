@@ -10,6 +10,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\ReportsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -50,6 +51,10 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/reports/weekly', [ReportController::class, 'weekly'])->name('reports.weekly');
     Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
     Route::get('/reports/yearly', [ReportController::class, 'yearly'])->name('reports.yearly');
+    Route::get('/reports/students', [ReportsController::class, 'students'])->name('reports.students');
+    Route::get('/reports/teachers', [ReportsController::class, 'teachers'])->name('reports.teachers');
+    Route::get('/reports/courses', [ReportsController::class, 'courses'])->name('reports.courses');
+    Route::get('/reports/departments', [ReportsController::class, 'departments'])->name('reports.departments');
     
     // Branches
     Route::resource('branches', BranchController::class);

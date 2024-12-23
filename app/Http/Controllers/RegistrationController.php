@@ -31,10 +31,8 @@ class RegistrationController extends Controller
                 'status' => 'required|in:Unpaid,Paid,Cancelled'
             ]);
 
-            // Ensure time_slot is stored as JSON
             $validated['time_slot'] = json_encode([$validated['time_slot']]);
 
-            // Create the registration
             $registration = Registration::create($validated);
 
             return response()->json([
@@ -69,13 +67,11 @@ class RegistrationController extends Controller
                 'fees_paid' => 'nullable|numeric|min:0'
             ]);
 
-            // Ensure time_slot is stored as JSON
             $validated['time_slot'] = json_encode([$validated['time_slot']]);
 
-            // If fees_paid is provided, add it to existing paid amount
             if (isset($validated['fees_paid'])) {
                 $validated['fees_paid'] = $registration->fees_paid + $validated['fees_paid'];
-                // Update status based on total payment
+       
                 $validated['status'] = $validated['fees_paid'] >= $validated['fees_total'] ? 'Paid' : 'Unpaid';
             }
 

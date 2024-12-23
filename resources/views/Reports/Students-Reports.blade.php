@@ -4,8 +4,9 @@
   <title>Reports</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <div class="container-fluid" style="padding:0px 0px;">
@@ -17,20 +18,19 @@
     </button>
     <div class="collapse navbar-collapse" id="mynavbar">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <!-- <a class="nav-link" href="javascript:void(0)">Link</a> -->
-        </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link" href="javascript:void(0)">Link</a> -->
-        </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link" href="javascript:void(0)">Link</a> -->
-        </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="text" placeholder="From">
-        <input class="form-control me-2" type="text" placeholder="To">        
-      </form>
+      <div class="d-flex align-items-center">
+        <form class="d-flex me-2" action="{{ route('reports.students') }}" method="GET">
+          <select class="form-select" name="report_type" onchange="this.form.submit()">
+            <option value="weekly" {{ ($reportType ?? 'weekly') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+            <option value="monthly" {{ ($reportType ?? 'weekly') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+            <option value="yearly" {{ ($reportType ?? 'weekly') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+          </select>
+        </form>
+        <button type="button" class="btn btn-outline-light" onclick="printReport()">
+          <i class="fas fa-print me-2"></i>Print List
+        </button>
+      </div>
     </div>
   </div>
 </nav>
@@ -45,59 +45,110 @@
           <th>Phone</th>
           <th>Department</th>
           <th>Course</th>
-          <th>Fees Of Course</th>
-          <th>Reminder</th>
-          <th>Time</th>
-          <th>Date</th>
+          <th>Fees Total</th>
+          <th>Fees Paid</th>
+          <th>Time Slot</th>
+          <th>Registration Date</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Anna</td>
-          <td>Pitt</td>
-          <td>35</td>
-          <td>New York</td>
-          <td>USA</td>
-          <td>Female</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Anna</td>
-          <td>Pitt</td>
-          <td>35</td>
-          <td>New York</td>
-          <td>USA</td>
-          <td>Female</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Anna</td>
-          <td>Pitt</td>
-          <td>35</td>
-          <td>New York</td>
-          <td>USA</td>
-          <td>Female</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-          <td>Yes</td>
-        </tr>
+        @forelse($students as $index => $student)
+          <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $student->first_name }}</td>
+            <td>{{ $student->last_name }}</td>
+            <td>{{ $student->address ?? 'N/A' }}</td>
+            <td>{{ $student->phone ?? 'N/A' }}</td>
+            <td>{{ $student->department_name ?? 'N/A' }}</td>
+            <td>{{ $student->course_name ?? 'N/A' }}</td>
+            <td>${{ number_format($student->fees_total ?? 0, 2) }}</td>
+            <td>${{ number_format($student->fees_paid ?? 0, 2) }}</td>
+            <td>
+              @php
+                try {
+                    $timeSlot = $student->time_slot;
+                    if ($timeSlot) {
+                        $cleaned = str_replace(['[', ']', '"', '\\'], '', $timeSlot);
+                        echo $cleaned;
+                    } else {
+                        echo 'N/A';
+                    }
+                } catch (Exception $e) {
+                    echo 'N/A';
+                }
+              @endphp
+            </td>
+            <td>{{ $student->registration_date ? date('Y-m-d', strtotime($student->registration_date)) : 'N/A' }}</td>
+          </tr>
+        @empty
+          <tr>
+            <td colspan="11" class="text-center">No students found for this period</td>
+          </tr>
+        @endforelse
       </tbody>
     </table>
-    <button type="button" class="btn btn-outline-primary" style="margin-left:10px;">Print List</button>
   </div>
 </div>
 
-</body>
+<script>
+function printReport() {
+    window.print();
+}
+</script>
 
-<!-- Mirrored from www.w3schools.com/bootstrap5/tryit.asp?filename=trybs_table_head&stacked=h by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 15 Sep 2024 10:15:56 GMT -->
+<style type="text/css" media="print">
+    @media print {
+        .navbar-toggler,
+        .btn-outline-light,
+        form.d-flex {
+            display: none !important;
+        }
+        
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            border-collapse: collapse;
+            page-break-inside: auto;
+        }
+        
+        thead {
+            display: table-header-group;
+        }
+        
+        tr {
+            page-break-inside: avoid;
+        }
+
+        body::before {
+            content: "Students Report";
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<style>
+.btn-outline-light {
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.btn-outline-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: white;
+    color: #f80000;
+}
+
+.form-select {
+    min-width: 150px;
+}
+</style>
+
+</body>
 </html>

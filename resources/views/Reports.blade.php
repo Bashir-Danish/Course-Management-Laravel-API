@@ -74,16 +74,16 @@
 
     <script>
         function Student(){
-            window.location.href="Reports/Students-Reports.php";
+            window.location.href = "{{ route('reports.students') }}";
         }
         function Teacher(){
-            window.location.href="Reports/Teachers-Reports.php";
+            window.location.href = "{{ route('reports.teachers') }}";
         }
         function Course(){
-            window.location.href="Reports/Course-Reports.php";
+            window.location.href = "{{ route('reports.courses') }}";
         }
         function Department(){
-            window.location.href="Reports/Department-Reports.php";
+            window.location.href = "{{ route('reports.departments') }}";
         }
         function showPopup() {
             document.getElementById("overlay").style.display = "flex";

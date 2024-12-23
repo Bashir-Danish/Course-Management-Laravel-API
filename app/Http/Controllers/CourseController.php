@@ -30,7 +30,6 @@ class CourseController extends Controller
             $isPaginated = true;
         }
         
-        // Debug log the courses data
         $courses->each(function($course) {
             \Log::info('Course time slots data:', [
                 'course_id' => $course->id,

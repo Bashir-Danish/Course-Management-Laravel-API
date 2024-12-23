@@ -12,18 +12,16 @@ class DepartmentController extends Controller
     {
         $query = Department::oldest();
         
-        // Handle search
         if ($request->has('search') && strlen($request->search) >= 3) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
                   ->orWhere('description', 'like', "%{$searchTerm}%");
             });
-            // Get all results without pagination when searching
+            // without pagination when searching
             $departments = $query->get();
             $isPaginated = false;
         } else {
-            // Use pagination when not searching
             $departments = $query->paginate(10);
             $isPaginated = true;
         }

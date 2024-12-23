@@ -111,29 +111,11 @@
                   <span class="mini-click-non">Backup</span>
                 </a>
               </li>
-              
               <li>
-                <a class="has-arrow" title="Reports" href="#" aria-expanded="false">
+                <a onclick="showPopup()" title="Reports" href="#" aria-expanded="false">
                   <span class="educate-icon educate-data-table icon-wrap"></span>
                   <span class="mini-click-non">Reports</span>
                 </a>
-                <ul class="submenu-angle" aria-expanded="false">
-                  <li>
-                    <a onclick="showPopup()" title="Weekly" href="#">
-                      <span class="mini-sub-pro">Weekly</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a onclick="showPopup()" title="Monthly" href="#">
-                      <span class="mini-sub-pro">Monthly</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a onclick="showPopup()" title="Yearly" href="#">
-                      <span class="mini-sub-pro">Yearly</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
 
               <!-- <li>
