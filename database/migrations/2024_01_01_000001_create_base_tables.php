@@ -92,7 +92,7 @@ return new class extends Migration
                 $table->string('address')->nullable();
                 $table->string('phone')->nullable();
                 $table->date('dob');
-                $table->date('enrolls_date');
+                // $table->date('enrolls_date');
                 $table->timestamps();
             });
             Log::info('Created students table');

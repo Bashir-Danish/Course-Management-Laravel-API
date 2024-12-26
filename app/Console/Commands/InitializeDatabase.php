@@ -155,7 +155,7 @@ class InitializeDatabase extends Command
                 $table->string('address')->nullable();
                 $table->string('phone')->nullable();
                 $table->date('dob');
-                $table->date('enrolls_date');
+                // $table->date('enrolls_date');
                 $table->timestamps();
             });
             $this->info('Created students table');
