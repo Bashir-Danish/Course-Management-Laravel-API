@@ -11,6 +11,7 @@ use App\Http\Controllers\BackupController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -58,4 +59,8 @@ Route::middleware(['auth:admin'])->group(function () {
     
     // Branches
     Route::resource('branches', BranchController::class);
+
+    // Profile routes
+    Route::get('/api/profile', [ProfileController::class, 'getProfile'])->name('profile.get');
+    Route::post('/api/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
 });
