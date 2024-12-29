@@ -30,7 +30,7 @@
         
           <!-- =================================== The Main Part ============================================== -->
           <hr>
-          <div class="table_123" style="padding:0 20px;">
+          <div class="table_123" >
             <div class="table123_haeder">
                 <h4 id="hh2">List Of Teachers</h4>
                 <div>
@@ -56,7 +56,7 @@
                     </thead>
                     <tbody>
                         @forelse($teachers as $teacher)
-                        <tr>
+                        <tr id="tr">
                             <td style="padding: 8px;">{{ $teacher->id }}</td>
                             <td style="padding: 8px;">{{ $teacher->first_name }}</td>
                             <td style="padding: 8px;">{{ $teacher->last_name }}</td>
@@ -204,6 +204,7 @@
     </script>
 
     <style>
+        
     .badge {
         padding: 5px 10px;
         border-radius: 15px;

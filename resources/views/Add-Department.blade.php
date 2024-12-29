@@ -32,15 +32,15 @@
           <div class="row">
             <div class="wrapper">
               <div class="inner d-flex flex-column flex-md-row">
-                <div class="image-holder" style="flex: 1; max-height: 400px;">
-                    <img src="{{ asset('img/department2.jpg') }}" alt="image-place" id="img" style="object-fit: cover; width: 100%; height: 100%; max-height: 400px;">
+                <div class="image-holder" style="flex: 1; max-height: 400px; margin-top: -12vh;">
+                    <img src="{{ asset('img/department2.jpg') }}" alt="image-place" id="img" style="object-fit: cover; width: 100%; height: 70vh;">
                 </div>
               <form action="" id="form2" style="flex: 1; padding: 1rem;" class="mt-3 mt-md-0">
                 @csrf
                 @if(isset($department))
                     @method('PUT')
                 @endif
-                <h2 class="h4 mb-4">{{ isset($department) ? 'Edit' : 'Add New' }} Department</h2>
+                <h2 class="h4 mb-4" style="margin-top: 8vh;">{{ isset($department) ? 'Edit' : 'Add New' }} Department</h2>
 
                 <div class="form-wrapper mb-3">
                   <input type="text" placeholder="Department Name" class="form-control" id="d-p-Name" name="name" value="{{ $department->name ?? '' }}" required>
@@ -48,13 +48,13 @@
                 </div>
 
                 <div class="form-wrapper mb-3">
-                <textarea name="description" id="area" class="form-control" placeholder="Department Description" rows="6" required style="width: 100%; resize: vertical;">{{ $department->description ?? '' }}</textarea>
+                <textarea name="description" id="area" class="form-control" placeholder="Department Description" rows="12" required style="width: 100%; resize: vertical;">{{ $department->description ?? '' }}</textarea>
                 <p class="error-message text-danger small mt-1" id="description_error"></p>
                 </div>
 
-                <div class="button-wrapper d-flex gap-2 justify-content-end">
-                  <button type="button" id="btn2" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-                  <button type="submit" id="btn1" class="btn btn-primary">{{ isset($department) ? 'Update' : 'Add' }}</button>
+                <div style="text-align: center;">
+                <button type="button" id="btn2" class="btn btn-secondary" style="display: inline-block; margin: 0 10px;" onclick="window.history.back()">Cancel</button>
+                <button type="submit" id="btn1" style="display: inline-block; margin: 0 10px;" class="btn btn-primary">{{ isset($department) ? 'Update' : 'Add' }}</button>
                 </div>
               </form>
               </div>

@@ -56,23 +56,25 @@
                 <div class="form-wrapper">
                   <input type="text" placeholder="Address" class="form-control" id="Address" required 
                          value="{{ $student->address ?? '' }}">
-                  <p id="address-error" class="error-message">Invalid Input</p>
+                  <!-- <p id="address-error" class="error-message">Invalid Input</p> -->
                 </div>
 
                 <div class="form-wrapper">
                   <input type="text" placeholder="Phone Number" class="form-control" id="Phone_N" required 
                          value="{{ $student->phone ?? '' }}">
-                  <p id="phone-error" class="error-message">Invalid Input</p>
+                  <!-- <p id="phone-error" class="error-message">Invalid Input</p> -->
                 </div>
 
                 <div class="form-wrapper">
                   <input type="date" placeholder="Date of Birth" class="form-control" id="dob" required 
                          value="{{ isset($student) ? date('Y-m-d', strtotime($student->dob)) : '' }}">
-                  <p id="dob-error" class="error-message">Invalid Input</p>
+                  <!-- <p id="dob-error" class="error-message">Invalid Input</p> -->
                 </div>
+                <div style="text-align: center;">
 
-                <button id="btn2" type="button">Cancel</button>
-                <button id="btn1" type="submit">{{ isset($student) ? 'Update' : 'Add' }}</button>
+                <button id="btn2" type="button" style="display: inline-block; margin: 0 10px;">Cancel</button>
+                <button id="btn1" type="submit" style="display: inline-block; margin: 0 10px;">{{ isset($student) ? 'Update' : 'Add' }}</button>
+                </div>
             
               </form>
               </div>

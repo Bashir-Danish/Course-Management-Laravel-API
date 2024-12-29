@@ -1,7 +1,7 @@
 <table id="tbl" style="border-collapse: collapse;">
     <thead>
         <tr>
-            <th style="padding: 8px;">ID</th>
+            <th style="">ID</th>
             <th style="padding: 8px;">First Name</th>
             <th style="padding: 8px;">Last Name</th>
             <th style="padding: 8px;">Email</th>
@@ -15,7 +15,7 @@
     <tbody>
         @forelse($teachers as $teacher)
         <tr>
-            <td style="padding: 8px;">{{ $teacher->id }}</td>
+            <td style="">{{ $teacher->id }}</td>
             <td style="padding: 8px;">{{ $teacher->first_name }}</td>
             <td style="padding: 8px;">{{ $teacher->last_name }}</td>
             <td style="padding: 8px;">{{ $teacher->email }}</td>
@@ -26,7 +26,7 @@
                 @endforeach
             </td>
             <td style="padding: 8px;">{{ ucfirst($teacher->gender) }}</td>
-            <td style="padding: 8px;">${{ number_format($teacher->salary, 2) }}</td>
+            <td style="padding: 8px;">{{ number_format($teacher->salary, 2) }}</td>
             <td style="padding: 8px;">
                 <i class="fa fa-pencil-square-o" aria-hidden="true" 
                    style="color: #007bff; cursor: pointer; margin-right: 10px; font-size: 16px;"
@@ -86,7 +86,7 @@
 }
 
 #tbl th, #tbl td {
-    padding: 12px;
+    padding: 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }

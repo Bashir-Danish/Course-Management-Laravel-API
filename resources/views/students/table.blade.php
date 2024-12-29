@@ -84,7 +84,7 @@
 }
 
 #tbl th, #tbl td {
-    padding: 12px;
+    padding: 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -100,6 +100,7 @@
 
 .custom-pagination {
     margin-top: 20px;
+    margin-left: 0px;
     display: flex;
     justify-content: center;
 }

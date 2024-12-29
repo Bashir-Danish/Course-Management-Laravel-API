@@ -23,7 +23,7 @@
     
     @include('head')
     <style>
-        body {
+        /* body {
             min-height: 100vh;
             position: relative;
             margin: 0;
@@ -37,14 +37,14 @@
             bottom: 0;
             width: 100%;
             height: 60px; 
-        }
+        } */
     </style>
 </head>
 
 <body>
     @include('sidebar')
 
-    <div class="all-content-wrapper">
+    <div class="all-content-wrapper" style="z-index:100">
         @include('header')
         @include('Mobile_menu')
         

@@ -23,14 +23,14 @@
         </div>
       </div>
       
-        <!-- header section -->
+        <!-- header section --->
         @include('header')
         <!-- Mobile Menu start -->
         @include('Mobile_menu')
         
           <!-- =================================== The Main Part ============================================== -->
          <!-- <hr> -->
-          <div class="table_123" style="padding:0 20px;">
+          <div class="table_123" >
             <div class="table123_haeder">
                 <h4 id="hh2">List Of Departments</h4>
                 <div>

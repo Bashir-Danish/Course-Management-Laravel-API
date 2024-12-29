@@ -5,7 +5,6 @@
      @include('head')
      <!--================================================================================================================ -->
   </head>
-
   <body>
     <!-- ================================================ Left Sidebar ================================================================ -->
       @include('sidebar')
@@ -13,7 +12,17 @@
 
     <!-- ========================================== Navbar Part  And Main Section ================================================-->
     <div class="all-content-wrapper">
-      <div class="container-fluid">
+
+     <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="logo-pro">
+              <a href="{{ route('dashboard') }}"><h2 id="head"><span id="title-1">Nano</span><span id="title-2">Net</span></h2></a>
+            </div>
+          </div>
+        </div>
+     </div>
+      <!-- <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="logo-pro">
@@ -21,11 +30,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
        <!-- header section -->
        @include('header')
         <!-- Mobile Menu start -->
-        @include('Mobile_menu')
+       @include('Mobile_menu')
 
         <div class="container-fluid">
           <div class="row">

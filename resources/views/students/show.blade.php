@@ -37,7 +37,7 @@
                           <div class="row w-100">
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                   <div class="student-info">
-                                      <h3>{{ $student->first_name }} {{ $student->last_name }}</h3>
+                                      <h3 style="margin-bottom:1em">{{ $student->first_name }} {{ $student->last_name }}</h3>
                                       <div class="info-grid">
                                           <div class="info-item">
                                               <span>Gender:</span>
@@ -64,15 +64,15 @@
                                       <div class="summary-boxes">
                                           <div class="summary-box">
                                               <h6>Total Fees</h6>
-                                              <h4>${{ number_format($student->registrations->sum('fees_total'), 2) }}</h4>
+                                              <h4>Afg{{ number_format($student->registrations->sum('fees_total'), 2) }}</h4>
                                           </div>
                                           <div class="summary-box">
                                               <h6>Total Paid</h6>
-                                              <h4>${{ number_format($student->registrations->sum('fees_paid'), 2) }}</h4>
+                                              <h4>Afg{{ number_format($student->registrations->sum('fees_paid'), 2) }}</h4>
                                           </div>
                                           <div class="summary-box">
                                               <h6>Remaining</h6>
-                                              <h4 class="text-danger">${{ number_format($student->registrations->sum('fees_total') - $student->registrations->sum('fees_paid'), 2) }}</h4>
+                                              <h4 class="text-danger">Afg{{ number_format($student->registrations->sum('fees_total') - $student->registrations->sum('fees_paid'), 2) }}</h4>
                                           </div>
                                       </div>
                                   </div>
@@ -85,40 +85,42 @@
                           <h5 class="mb-3">Course Registration</h5>
                           <form id="registrationForm" class="registration-form">
                               <div class="row">
-                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="width: 37%;">
-                                      <div class="form-group">
-                                          <label for="course_id">Select Course:</label>
-                                          <select class="form-control form-control-sm" id="course_id" name="course_id" required>
-                                              <option value="">Select Course</option>
-                                              @foreach($courses as $course)
-                                                  <option value="{{ $course['id'] }}" 
-                                                      data-fee="{{ $course['fees'] }}"
-                                                      data-time-slots="{{ $course['available_time_slots'] }}">
-                                                      {{ $course['name'] }}
-                                                  </option>
-                                              @endforeach
-                                          </select>
-                                          <small class="text-muted">Course Fee: $<span id="course_fee">0.00</span></small>
-                                      </div>
+                                  <div style="display:flex; align-items:baseline; justify-content:space-evenly; flex-wrap:wrap; " >
+                                      <div style="display:flex; align-items:baseline" >
+                                        <div style="display:flex; align-items:baseline">
+                                            <label for="course_id">Select Course:</label>
+                                            <select class="form-control form-control-sm" id="course_id" name="course_id" required>
+                                                <option value="">Select Course</option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{ $course['id'] }}" 
+                                                        data-fee="{{ $course['fees'] }}"
+                                                        data-time-slots="{{ $course['available_time_slots'] }}">
+                                                        {{ $course['name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                          <label class="text-muted" style="width:fit-content">Course Fee: Afg<span id="course_fee">0.00</span></label>
+                                        </div>
+                                        <div style="display:flex; align-items:baseline">
+                                            <label for="time_slot">Time Slot:</label>
+                                            <select class="form-control form-control-sm" id="time_slot" name="time_slot" required disabled>
+                                                <option value="">First select a course</option>
+                                            </select>
+                                        </div>
+                                        <div style="display:flex; align-items:baseline">
+                                            <label for="fees_paid">Payment Amount:</label>
+                                            <input type="number" class="form-control form-control-sm" id="fees_paid" name="fees_paid" 
+                                                   step="0.01" min="0" required>
+                                        </div>
+                                        <input type="hidden" name="student_id" value="{{ $student->id }}">
                                   </div>
-                                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="width: 25%;">
-                                      <div class="form-group">
-                                          <label for="time_slot">Time Slot:</label>
-                                          <select class="form-control form-control-sm" id="time_slot" name="time_slot" required disabled>
-                                              <option value="">First select a course</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="width: 25%;">
-                                      <div class="form-group">
-                                          <label for="fees_paid">Payment Amount:</label>
-                                          <input type="number" class="form-control form-control-sm" id="fees_paid" name="fees_paid" 
-                                                 step="0.01" min="0" required>
-                                      </div>
-                                      <input type="hidden" name="student_id" value="{{ $student->id }}">
-                                  </div>
-                                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="width: 10%;">
-                                      <button type="submit" class="btn btn-primary btn-sm mt-2">Register Course</button>
+                                  <!-- <div  > -->
+                                  <!-- </div> -->
+                                  <!-- <div  > -->
+                                  <!-- </div> -->
+                                  <div style="display:flex; width:100%; justify-content:center; align-items:center"  >
+                                      <button type="submit" class="btn btn-primary btn-sm mt-2" style="width:fit-content">Register Course</button>
                                   </div>
                               </div>
                           </form>
@@ -264,7 +266,6 @@
         e.preventDefault();
         if (checkInputs()) {
             const timeSlot = document.getElementById('time_slot').value;
-            
             if (!timeSlot) {
                 showNotification('Please select a time slot', 'danger');
                 return;
@@ -276,7 +277,7 @@
                 time_slot: JSON.stringify([timeSlot]),
                 fees_total: parseFloat(document.getElementById('course_fee').textContent),
                 registration_date: new Date().toISOString().split('T')[0],
-                status: 'Unpaid',
+                status: parseFloat(document.getElementById('course_fee').textContent) > parseFloat(document.getElementById('fees_paid').textContent) ?  'Unpaid' : "Paid",
                 _token: '{{ csrf_token() }}'
             };
 
@@ -572,10 +573,12 @@
 
     #registrationForm {
         gap: 10px;
+        flex-wrap:wrap;
+
     }
 
     #registrationForm .form-group {
-        
+        align-items:baseline
     }
 
     .form-control-sm {
@@ -611,7 +614,7 @@
     }
 
     .info-row {
-        height: 100px;
+
         padding: 10px 20px;
         background: white;
         border-bottom: 1px solid #dee2e6;
@@ -632,7 +635,7 @@
     .info-item {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         font-size: 0.85rem;
     }
 
@@ -737,6 +740,118 @@
         opacity: 1;
     }
 
+    /* General Styles */
+.info-row {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.student-info{
+    padding-top:30px
+}
+
+.student-info h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.info-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:3px 10px;
+}
+
+
+.info-item span:first-child {
+    font-weight: bold;
+    color: #555;
+}
+
+.info-item span:last-child {
+    color: #777;
+    margin-left: 5px;
+}
+
+.payment-summary {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.summary-box {
+    flex: 1 1 calc(33.333% - 10px);
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.summary-box h6 {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.summary-box h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.summary-box h4.text-danger {
+    color: #d9534f;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-box {
+        flex: 1 1 100%;
+    }
+
+    .info-row .row {
+        flex-direction: column;
+    }
+
+    .info-row .col-lg-6,
+    .info-row .col-md-6,
+    .info-row .col-sm-6,
+    .info-row .col-xs-6 {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+
     @keyframes slideIn {
         from {
             transform: translateX(100%);
@@ -747,6 +862,7 @@
             opacity: 1;
         }
     }
+    
     </style>
   </body>
 </html>

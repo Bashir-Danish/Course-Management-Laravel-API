@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
 <div class="container-fluid" style="padding:0px 0px;">
 <nav class="navbar navbar-expand-sm" style="background-color:#f80000; padding:10px; font-size:50px;">
   <div class="container-fluid">
@@ -18,6 +19,15 @@
     </button>
     <div class="collapse navbar-collapse" id="mynavbar">
       <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+
+        </li>
+        <li class="nav-item">
+
+       </li>
+       <li class="nav-item">
+
+        </li>
       </ul>
       <div class="d-flex align-items-center">
         <form class="d-flex me-2" action="{{ route('reports.courses') }}" method="GET">
@@ -29,8 +39,8 @@
           </select>
         </form>
         <button type="button" class="btn btn-outline-light" onclick="printReport()">
-          <i class="fas fa-print me-2"></i>Print List
-        </button>
+      <i class="fas fa-print me-2"></i>Print List
+     </button>
       </div>
     </div>
   </div>
@@ -53,7 +63,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $course->name }}</td>
             <td>{{ $course->department_name ?? 'N/A' }}</td>
-            <td>${{ number_format($course->fees, 2) }}</td>
+            <td>{{ number_format($course->fees, 2) }}</td>
             <td>{{ json_decode($course->available_time_slots, true) ? implode(', ', json_decode($course->available_time_slots, true)) : 'N/A' }}</td>
             <td>{{ $course->duration }}</td>
           </tr>

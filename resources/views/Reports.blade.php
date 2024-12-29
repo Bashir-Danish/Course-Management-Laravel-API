@@ -12,6 +12,7 @@
             background: rgba(0, 0, 0, 0.6);
             justify-content: center;
             align-items: center;
+            z-index: 10;
         }
         #popup {
             background: white;
@@ -23,6 +24,7 @@
             background-color: #ff6347;
             margin-bottom: 40px; 
             outline:3px solid white;
+            
             
         }
         .bn{

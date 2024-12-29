@@ -15,7 +15,7 @@
         <tr>
             <td style="padding: 10px;">{{ $course->id }}</td>
             <td style="padding: 10px;">{{ $course->name }}</td>
-            <td style="padding: 10px;">${{ number_format($course->fees, 2) }}</td>
+            <td style="padding: 10px;">{{ number_format($course->fees, 2) }}</td>
             <td style="padding: 10px;">{{ $course->duration }}</td>
             <td style="padding: 10px;">{{ $course->department->name }}</td>
             <td style="padding: 10px;" class="time-slots-cell">

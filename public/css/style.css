@@ -908,6 +908,7 @@ ul.breadcome-menu li a:hover{
 
 .footer-copyright-area {
     background: black;
+    border-radius: 12%;
 	padding: 10px 0px;
     text-align: center;
     position: fixed;
@@ -985,10 +986,11 @@ img {vertical-align: middle;}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 100%;
+  width: 100%;
   position: relative;
-  margin-left: 20px;
-  margin-right: 5px;
+
+  /* margin-left: 20px;
+  margin-right: 5px; */
 }
 
 /* Caption text */
@@ -1088,13 +1090,20 @@ img{
     padding: 20px;
     background:gainsboro;
     width:100%;
+    padding-inline: 8em;
     margin: auto;
     display: flex;
+    justify-content: space-between;
+    align-items: center
 }
 .form-group{
-    margin: 0;
+    width: 100%;
     display: flex;
-    align-items: baseline;
+    justify-content: space-between;
+    margin: 0;
+}
+#T_Name , #L_Name{
+    max-width: 280px;
 }
 .inner .image-holder{
     width: 45%;
@@ -1102,12 +1111,14 @@ img{
 #img{
     width: 650px;
     height: 600px;
-    margin-top: 25px;
+    margin-top: 20px;
     border-radius: 50px;
+    object-fit: cover;
+    object-position: center;
 }
 .inner form{
     width: 50%;
-    padding-left: 100px;
+    margin-left: 50px;
 }
 .inner h2{
     text-transform: uppercase;
@@ -1117,12 +1128,12 @@ img{
     margin-bottom: 50px;
     color: #ff6347;
 }
-.form-group input{
+/* .form-group input{
     width: 50%;
-}
-.form-group input:first-child{
+} */
+/* .form-group input:first-child{
     margin-right: 25px;
-}
+} */
 .form-wrapper{
     position: relative;
 }
@@ -1133,11 +1144,11 @@ img{
     border: 1px solid black;
     border: none;
     border-bottom: 1px solid gray;
-    display: block;
+    /* display: block; */
     width: 100%;
     height: 50px;
-    border-radius: 20px;
-    padding-right: 0;
+    border-radius: 10px;
+    padding: .5em 1.5em;
     margin-bottom: 20px;
     margin-left: 5px;
 }
@@ -1145,25 +1156,29 @@ img{
 select{
     cursor: pointer;
     color: gray;
+
 }
 select option[value=""][disabled]{
    display: none;
 }
 #btn1,#btn2{
     border: none;
-    width: 200px;
-    height: 60px;
+    width: 150px;
+    height: 50px;
     margin: auto;
     margin-top: 40px;
     cursor: pointer;
-    display: inline;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding-left: 0;
-    background-color: #000;
-    font-size: 20px;
+    background-color: #202020;
+    font-size: 15px;
+    /* font-weight: bold; */
     color: white;
-    border-radius: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px black;
+    transition: all ease-in-out 200ms;
 }
 #btn2{
     margin-left: 12%;
@@ -1173,11 +1188,13 @@ select option[value=""][disabled]{
     background: #ff6347;
     font-weight: bold;
     color: white;
+    /* font-size: 17px; */
 }
 #btn2:hover{
     background: #ff6347;
     font-weight: bold;
     color: white;
+    /* font-size: 17px; */
 }
 @media (max-width:767px){
     .inner{
@@ -1189,6 +1206,7 @@ select option[value=""][disabled]{
     .inner form {
         width: 100%;
         padding: 40px 0 30px;
+        margin-inline: auto;
     }
     #btn1{
         margin-top: 60px;
@@ -1226,7 +1244,7 @@ select option[value=""][disabled]{
     --tran-03: all 0.3s ease;
     --tran-03: all 0.2s ease;
 }
-.dash-content{
+ .dash-content{
     margin: 20px;
 }
 .dash-content .boxes {
@@ -1350,10 +1368,11 @@ select option[value=""][disabled]{
     background-color: blue;
     border-radius: 10px;
     font-weight: bold;
+    border:none;
 }
 input{
     padding: 10px 20px;
-    margin: 0 10px;
+    /* margin: 0 10px; */
     outline: none;
     border: 1px solid #0298cf;
     border-radius: 8px;
@@ -1407,6 +1426,11 @@ tr:hover td{
     justify-content: center;
     /* padding: 15px; */
     margin: 0;
+}
+
+#tx {
+    border: solid 1px lightgray ;
+
 }
 
 @media screen and (max-width:560px){
@@ -1541,6 +1565,7 @@ tr:hover td{
 /* ============================================ Times Section in Adding Coures =================================================== */
     /* Basic styling for the dropdown */
     .dropdown1{
+        width: 100%;
         position: relative;
         display: inline-block;
         cursor: pointer;
@@ -1549,6 +1574,7 @@ tr:hover td{
     .dropdown-content1{
         display: none;
         position: absolute;
+        bottom: 0px;
         background-color: #f1f1f1;
         min-width: 200px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -1569,7 +1595,6 @@ tr:hover td{
         margin-right: 10px;
     }
     #bbb{
-        width: 550px;
         font-weight: bold;
     }
     

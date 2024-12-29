@@ -1,4 +1,4 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app') -->
 
 @section('content')
 <div class="container-fluid">
@@ -12,7 +12,7 @@
 </div>
 
 <!-- Main Content -->
-<div class="table_123" style="padding:0 20px;">
+<div class="table_123" >
     <div class="table123_haeder">
         <h4 id="hh2">List Of Courses</h4>
         <div>
@@ -22,6 +22,7 @@
     </div>
     
     <div class="table123_section">
+
     </div>
 </div>
 

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
   <head>
@@ -5,17 +6,27 @@
      @include('head')
      <!--================================================================================================================ -->
   </head>
-
+  
   <body>
-    <div id="notification-container"></div>
-    
+    <!-- <div id="notification-container"></div> -->
     <!-- ================================================ Left Sidebar ================================================================ -->
       @include('sidebar')
     <!-- ===============================================================================================================================-->
      
     <!-- ========================================== Navbar Part  And Main Section ================================================-->
     <div class="all-content-wrapper">
-      <div class="container-fluid">
+    
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="logo-pro">
+              <a href="{{ route('dashboard') }}"><h2 id="head"><span id="title-1">Nano</span><span id="title-2">Net</span></h2></a>
+            </div>
+          </div>
+        </div>
+     </div>
+
+      <!-- <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="logo-pro">
@@ -23,8 +34,7 @@
             </div>
           </div>
         </div>
-      </div>
-     
+      </div> -->
          <!-- header section -->
         @include('header')
         <!-- Mobile Menu start -->
@@ -37,7 +47,7 @@
                 <div class="image-holder">
                       <img src="{{ asset('img/language2.jpg') }}" alt="image-place" id="img">
                 </div>
-              <form id="form1" method="POST" action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
+              <form id="form1" method="POST" action="{{isset($course) ? route('courses.update', $course->id) : route('courses.store') }}">
                 @csrf
                 @if(isset($course))
                     @method('PUT')
@@ -132,11 +142,138 @@
             </div>
           </div>
         </div>
-      </div> 
-    </div>  
-    <!--=================================================== Form Validation =======================================================================-->
-    <script>
-    const form = document.querySelector('#form1');
+    
+        <div id="notification-container"></div>
+
+  <style>
+    .alert {
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+    .dropdown1 {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+    .time-period {
+        font-weight: bold;
+        padding: 5px;
+        background-color: #f8f9fa;
+        margin-top: 5px;
+        border-radius: 4px;
+        text-align: center;
+    }
+    .dropdown-content1 {
+        padding: 10px;
+    }
+    .dropdown-content1 label {
+        display: block;
+        padding: 5px 10px;
+        margin: 2px 0;
+        cursor: pointer;
+        text-align: left;
+    }
+    .dropdown-content1 label:hover {
+        background-color: #f8f9fa;
+    }
+    .dropdown-content1 input[type="checkbox"] {
+        margin-right: 8px;
+    }
+    .selected-slots {
+        margin-top: 5px;
+        font-size: 12px;
+        color: #666;
+    }
+    .time-slots-container {
+        display: flex;
+        gap: 20px;
+    }
+    .time-slot-column {
+        flex: 1;
+    }
+    #notification-container {
+        position: fixed;
+        top: 85px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .notification {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 20px;
+        border-radius: 4px;
+        min-width: 300px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .notification-success {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        color: #155724;
+    }
+
+    .notification-danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+    }
+
+    .notification-close {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0 0 0 10px;
+        opacity: 0.5;
+    }
+
+    .notification-close:hover {
+        opacity: 1;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+      }
+      </style>
+ 
+ <!-- ================================================= Admin Panel ==================================================== -->
+@include('Admin_panel')
+          <!-- ================================================================================================================== -->
+           @include('Reports')
+          <!-- ===================================================== Footer =============================================================== -->
+           @include('Footer')
+          <!--========================================================================================================================== -->
+  
+                
+        <!--=================================================== Form Validation =======================================================================-->
+        <script>
+          const form = document.querySelector('#form1');
     const C_Name = document.querySelector('#CourseName');
     const F_Of_C = document.querySelector('#FeesOfCourse');
     const Duration = document.querySelector('#Duration');
@@ -154,6 +291,7 @@
         closeButton.className = 'notification-close';
         closeButton.innerHTML = '&times;';
         closeButton.onclick = () => notification.remove();
+        console.log(messageText);
         
         notification.appendChild(messageText);
         notification.appendChild(closeButton);
@@ -290,129 +428,7 @@
 
       return isValid;
     };
-    </script>
-    <!-- ================================================= Admin Panel ==================================================== -->
-     @include('Admin_panel')
-    <!-- ================================================================================================================== -->
-     @include('Reports')
-    <!-- ===================================================== Footer =============================================================== -->
-     @include('Footer')
-    <!--========================================================================================================================== -->
-    <style>
-    .alert {
-        padding: 10px 15px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-    }
-    .alert-success {
-        background-color: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
-    }
-    .alert-danger {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
-    }
-    .dropdown1 {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-    }
-    .time-period {
-        font-weight: bold;
-        padding: 5px;
-        background-color: #f8f9fa;
-        margin-top: 5px;
-        border-radius: 4px;
-        text-align: center;
-    }
-    .dropdown-content1 {
-        padding: 10px;
-    }
-    .dropdown-content1 label {
-        display: block;
-        padding: 5px 10px;
-        margin: 2px 0;
-        cursor: pointer;
-        text-align: left;
-    }
-    .dropdown-content1 label:hover {
-        background-color: #f8f9fa;
-    }
-    .dropdown-content1 input[type="checkbox"] {
-        margin-right: 8px;
-    }
-    .selected-slots {
-        margin-top: 5px;
-        font-size: 12px;
-        color: #666;
-    }
-    .time-slots-container {
-        display: flex;
-        gap: 20px;
-    }
-    .time-slot-column {
-        flex: 1;
-    }
-    #notification-container {
-        position: fixed;
-        top: 85px;
-        right: 20px;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+   </script>
 
-    .notification {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 20px;
-        border-radius: 4px;
-        min-width: 300px;
-        background: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideIn 0.3s ease-out;
-    }
-
-    .notification-success {
-        background-color: #d4edda;
-        border-left: 4px solid #28a745;
-        color: #155724;
-    }
-
-    .notification-danger {
-        background-color: #f8d7da;
-        border-left: 4px solid #dc3545;
-        color: #721c24;
-    }
-
-    .notification-close {
-        background: none;
-        border: none;
-        color: inherit;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0 0 0 10px;
-        opacity: 0.5;
-    }
-
-    .notification-close:hover {
-        opacity: 1;
-    }
-
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    </style>
-  </body>
-</html>
+    </body>
+  </html>
