@@ -91,15 +91,15 @@
                     $timeSlots = [
                         'Morning' => [
                             '7:00-8:00' => '7:00 - 8:00',
-                            '8:00-9:00' => '8:00 - 9:00',
+                            '8:30-9:30' => '8:30 - 9:30',
                             '9:00-10:00' => '9:00 - 10:00',
-                            '10:00-11:00' => '10:00 - 11:00',
+                            '10:30-11:30' => '10:30 - 11:30',
                         ],
                         'Afternoon' => [
-                            '11:00-12:00' => '11:00 - 12:00',
                             '12:00-13:00' => '12:00 - 1:00',
                             '13:00-14:00' => '1:00 - 2:00',
-                            '14:00-15:00' => '2:00 - 3:00',
+                            '14:30-15:30' => '2:30 - 3:30',
+                            '16:30-17:30' => '4:30 - 5:30',
                         ]
                     ];
                     $selectedSlots = isset($course) ? (is_array($course->available_time_slots) ? $course->available_time_slots : json_decode($course->available_time_slots ?? '[]', true)) : [];
@@ -334,7 +334,7 @@
         }
 
         const formData = {
-          name: C_Name.value,
+          name: C_Name.value, 
           fees: F_Of_C.value,
           duration: Duration.value,
           department_id: document.getElementById('department').value,
@@ -413,7 +413,7 @@
 
       if(!validStr1.test(courseValue)){
         document.getElementById("CourseName").style.border = "2px solid red";
-        document.getElementById("ppp1").style.display = "inherit";
+        document.getElementById("ppp1").style.display = "inherit"; 
         isValid = false;
       }
       if(!validFees.test(feescourselValue)){

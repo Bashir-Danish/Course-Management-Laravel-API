@@ -3,39 +3,41 @@
   <head>
      @include('head')
      <style>
-        .backup-container {
+
+        .backup-container { 
             min-height: 100vh;
             padding: 40px 0;
         }
-        .backup-card {
+        .backup-card { 
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             max-width: 450px;
             margin: auto;
         }
-        .backup-header {
+        .backup-header { 
             background: #ff6347;
             color: white;
             border-radius: 15px 15px 0 0;
             padding: 20px;
             text-align: center;
+            margin-top: 8vh;
         }
-        .backup-body {
+        .backup-body { 
             padding: 30px;
         }
-        .backup-input {
+        .backup-input { 
             border: 2px solid #e3e3e3;
             border-radius: 10px;
             padding: 12px;
             font-size: 16px;
             transition: all 0.3s ease;
         }
-        .backup-input:focus {
+        .backup-input:focus { 
             border-color: #ff6347;
             box-shadow: 0 0 0 0.2rem rgba(255, 99, 71, 0.25);
         }
-        .backup-btn {
+        .backup-btn { 
             background: #ff6347;
             border: none;
             border-radius: 25px;
@@ -44,18 +46,19 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-        .backup-btn:hover {
+        .backup-btn:hover { 
             background: #ff6347;
+            color: black;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        .loading {
+        .loading { 
             display: none;
             position: relative;
         }
         
-        .loading:after {
+        .loading:after { 
             content: '';
             width: 20px;
             height: 20px;
@@ -69,7 +72,7 @@
             transform: translateY(-50%);
         }
         
-        @keyframes spin {
+        @keyframes spin { 
             0% { transform: translateY(-50%) rotate(0deg); }
             100% { transform: translateY(-50%) rotate(360deg); }
         }
@@ -77,10 +80,10 @@
   </head>
 
   <body>
-    @include('sidebar')
-
-    <div class="all-content-wrapper">
-      <div class="container-fluid">
+    @include('sidebar') 
+ 
+    <div class="all-content-wrapper"> 
+      <div class="container-fluid"> 
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="logo-pro">
@@ -118,7 +121,7 @@
                           
                           <div class="text-center mt-4">
                               <button type="submit" class="btn btn-primary backup-btn" id="backupBtn">
-                                  <span class="btn-text"><i class="fas fa-download me-2"></i>Generate Backup</span>
+                                  <span class="btn-text"><i class="fas fa-download me-2"></i> Generate Backup</span>
                                   <span class="loading"></span>
                               </button>
                           </div>
@@ -134,13 +137,13 @@
     @include('Reports')
     @include('Footer')
 
-    <script>
-    $(document).ready(function() {
-        $('#backupForm').on('submit', function(e) {
+    <script> 
+    $(document).ready(function() { 
+        $('#backupForm').on('submit', function(e) { 
             e.preventDefault();
-            
+             
             const form = $(this);
-            const button = $('#backupBtn');
+            const button = $('#backupBtn'); 
             const alertContainer = $('#alert-container');
             
             alertContainer.empty();
@@ -148,15 +151,15 @@
             button.prop('disabled', true);
             button.addClass('loading');
             
-            const formData = new FormData(this);
-        
+            const formData = new FormData(this); 
+         
             $.ajax({
                 url: form.attr('action'),
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response, status, xhr) {
+                success: function(response, status, xhr) { 
                     const blob = new Blob([response], { type: 'application/sql' });
                     const url = window.URL.createObjectURL(blob);
                     
@@ -165,7 +168,7 @@
                     
                     link.href = url;
                     link.download = filename;
-                    document.body.appendChild(link);
+                    document.body.appendChild(link); 
                     link.click();
                     document.body.removeChild(link);
                     
@@ -175,7 +178,7 @@
                 },
                 error: function(xhr) {
                     let errorMessage = 'An error occurred while generating the backup.';
-                    
+                     
                     try {
                         const response = JSON.parse(xhr.responseText);
                         errorMessage = response.error || errorMessage;

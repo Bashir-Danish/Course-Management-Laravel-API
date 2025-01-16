@@ -32,7 +32,7 @@
                    style="color: #007bff; cursor: pointer; margin-right: 10px; font-size: 16px;"
                    onclick="editTeacher({{ $teacher->id }})" 
                    data-toggle="tooltip" title="Edit"></i>
-                <i class="fa fa-trash-o" aria-hidden="true" 
+                <i class="fa fa-trash" aria-hidden="true" 
                    style="color: #dc3545; cursor: pointer; font-size: 16px;"
                    onclick="deleteTeacher({{ $teacher->id }})" 
                    data-toggle="tooltip" title="Trash"></i>
@@ -79,65 +79,65 @@
 @endif 
 
 <style>
-#tbl {
+#tbl { 
     width: 100%;
     border-collapse: collapse;
     /* margin-top: 20px; */
 }
 
-#tbl th, #tbl td {
+#tbl th, #tbl td { 
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-#tbl th {
+#tbl th { 
     /* background-color: #f8f9fa; */
     font-weight: bold;
 }
 
-#tbl tr:hover {
+#tbl tr:hover { 
     background-color: #f5f5f5;
 }
 
-.bt {
-    border: none;
+.bt { 
+    border: none; 
     background: none;
     cursor: pointer;
     padding: 5px;
 }
 
-#btt1 {
+#btt1 { 
     color: #007bff;
 }
 
-#btt2 {
+#btt2 { 
     color: #dc3545;
 }
 
-.bt:hover {
+.bt:hover { 
     opacity: 0.8;
 }
 
 
-.custom-pagination {
+.custom-pagination { 
     justify-content: center;
     margin-top: 20px;
     display: flex;
 }
 
-.pagination {
+.pagination { 
     display: flex;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.page-item {
+.page-item { 
     margin: 0 2px;
 }
 
-.page-link {
+.page-link { 
     padding: 8px 12px;
     border: 1px solid #dee2e6;
     color: #007bff;
@@ -145,13 +145,13 @@
     background-color: #fff;
 }
 
-.page-item.active .page-link {
+.page-item.active .page-link { 
     background-color: #007bff;
     color: white;
     border-color: #007bff;
 }
 
-.page-item.disabled .page-link {
+.page-item.disabled .page-link { 
     color: #6c757d;
     pointer-events: none;
     background-color: #fff;

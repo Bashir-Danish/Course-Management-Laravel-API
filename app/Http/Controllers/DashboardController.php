@@ -7,9 +7,9 @@ use App\Models\Teacher;
 use App\Models\Course;
 use App\Models\Department;
 use Illuminate\Http\Request;
-
-class DashboardController extends Controller
-{
+ 
+class DashboardController extends Controller 
+{ 
     public function index()
     {
         $data = [

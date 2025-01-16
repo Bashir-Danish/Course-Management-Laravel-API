@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
-
-class BackupController extends Controller
+ 
+ class BackupController extends Controller
 {
     public function index()
     {
         return view('backup.index');
     }
 
-    public function create(Request $request)
+    public function create(Request $request) 
     {
         try {
             $request->validate([

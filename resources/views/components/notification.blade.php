@@ -1,7 +1,7 @@
 <div id="notification-container"></div>
 
 <style>
-#notification-container {
+#notification-container { 
     position: fixed;
     top: 85px;
     right: 20px;
@@ -11,7 +11,7 @@
     gap: 10px;
 }
 
-.notification {
+.notification { 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -24,19 +24,19 @@
     margin-bottom: 10px;
 }
 
-.notification-success {
+.notification-success { 
     background-color: #d4edda;
     border-left: 4px solid #28a745;
     color: #155724;
 }
 
-.notification-danger {
+.notification-danger { 
     background-color: #f8d7da;
     border-left: 4px solid #dc3545;
     color: #721c24;
 }
 
-.notification-close {
+.notification-close { 
     background: none;
     border: none;
     color: inherit;
@@ -46,11 +46,11 @@
     opacity: 0.5;
 }
 
-.notification-close:hover {
+.notification-close:hover { 
     opacity: 1;
 }
 
-@keyframes slideIn {
+@keyframes slideIn { 
     from {
         transform: translateX(100%);
         opacity: 0;
@@ -60,10 +60,10 @@
         opacity: 1;
     }
 }
-</style>
+</style> 
 
 <script>
-function showNotification(message, type = 'success') {
+function showNotification(message, type = 'success') { 
     const container = document.getElementById('notification-container');
     
     const notification = document.createElement('div');

@@ -5,6 +5,7 @@
      @include('head')
      <!--================================================================================================================ -->
   </head>
+  
   <body>
     <!-- ================================================ Left Sidebar ================================================================ -->
       @include('sidebar')
@@ -47,15 +48,14 @@
                 @csrf
                 <h2>{{ isset($teacher) ? 'Edit' : 'Add New' }} Teacher</h2>
 
-                <div id="notification-container"></div>
+                <div id="notification-container"></div> 
 
-                <div class="form-group">
-                  <input type="text" placeholder="First Name" class="form-control" id="T_Name" name="first_name" 
-                         value="{{ $teacher->first_name ?? '' }}" required>
+                <div class="form-group"> 
+                  <input type="text" placeholder="First Name" class="form-control"id="T_Name" name="first_name"
+                         value="{{ $teacher->first_name ?? '' }}" required>  
                   
                   <input type="text" placeholder="Last Name" class="form-control" id="L_Name" name="last_name" 
-                         value="{{ $teacher->last_name ?? '' }}" required>
-              
+                         value="{{ $teacher->last_name ?? '' }}" required> 
                 </div>
                 
                 <div class="form-wrapper">
@@ -299,7 +299,10 @@
         element.closest('.tag').remove();
     }
     </script>
+
     <style>
+
+    
     .department-selector {
         position: relative;
     }
@@ -395,17 +398,17 @@
             opacity: 0;
         }
         to {
-            transform: translateX(0);
-            opacity: 1;
+            transform: translateX(0); 
+            opacity: 1;  
         }
     }
-    </style>
+    </style> 
     <!-- ================================================= Admin Panel ==================================================== -->
-    @include('Admin_panel')
+    @include('Admin_panel') 
     <!-- ================================================================================================================== -->
-    @include('Reports')
+    @include('Reports') 
     <!-- ===================================================== Footer =============================================================== -->
-     @include('Footer')
+     @include('Footer') 
     <!--========================================================================================================================== -->
   </body>
 </html>

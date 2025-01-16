@@ -166,7 +166,7 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->id();
                     $table->string('name');
                     $table->decimal('fees', 10, 2);
-                    $table->string('duration');
+                    $table->string('duration')->comment('Format: "X months", "X years", "X weeks", "X days" where X is a number');
                     $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
                     $table->json('available_time_slots');
                     $table->timestamps();
@@ -222,7 +222,8 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     $table->string('last_name');
                     $table->string('email')->unique();
                     $table->string('password');
-                    $table->string('role');
+                    $table->enum('role', ['super_admin', 'employee']);
+                    $table->string('profile_image')->nullable()->default('default-profile.png');
                     $table->timestamps();
                 });
                 break;
@@ -272,6 +273,7 @@ class DatabaseSetupServiceProvider extends ServiceProvider
                     'email' => 'admin@admin.com',
                     'password' => bcrypt('admin123'), 
                     'role' => 'super_admin',
+                    'profile_image' => 'default-profile.png',
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);

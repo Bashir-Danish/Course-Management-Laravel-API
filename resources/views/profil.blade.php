@@ -57,7 +57,7 @@
       object-fit: cover;
       border: 2px solid #ddd;
     }
-
+    
     .upload-btn {
       margin: 8px 0;
       padding: 6px;

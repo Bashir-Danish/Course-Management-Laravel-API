@@ -25,7 +25,7 @@ class RegisterController extends Controller
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role' => 'admin'
+                'role' => 'employee'
             ]);
 
             Auth::guard('admin')->login($admin);
@@ -39,11 +39,14 @@ class RegisterController extends Controller
 
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
+            \Log::error('Registration error: ' . $e->getMessage());
+            
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Registration failed. Please try again.'
-                ]);
+                    'message' => 'Registration failed. Please try again.',
+                    'error' => config('app.debug') ? $e->getMessage() : null
+                ], 422);
             }
 
             return back()->withInput()->withErrors([

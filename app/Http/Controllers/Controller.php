@@ -8,6 +8,6 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Traits\ApiResponse;
 
 class Controller extends BaseController
-{
+{ 
     use AuthorizesRequests, ValidatesRequests, ApiResponse;
 }

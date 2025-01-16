@@ -19,8 +19,93 @@
     <div class="collapse navbar-collapse" id="mynavbar">
       <ul class="navbar-nav me-auto">
       </ul>
+
+      <button type="button" class="btn btn-outline-light" onclick="refreshPage()" style="margin-right: 15px;">
+              <i></i>back
+      </button>
+
+      <button type="button" class="btn btn-outline-light" onclick="homePage()" style="margin-right: 15px;">
+              <i></i>Home
+      </button>
+       
+         <script>
+            function refreshPage(){
+            window.location.href = "{{ route('reports.teachers') }}";
+            }
+          </script>
+
+          <script>
+            function homePage(){
+            window.location.href = "{{ route('dashboard') }}";
+            }
+          </script>
+
       <div class="d-flex align-items-center">
+
+      <form class="d-flex me-2" action="{{ route('reports.teachers') }}" method="GET">
+      @if(request('selected_gender'))
+      <input type="hidden" name="selected_gender" value="{{ request('selected_gender')}}">
+        @endif
+        @if(request('report_type'))
+        <input type="hidden" name="report_type" value="{{ request('report_type')}}">
+        @endif
+        @if(request('selected_salary'))
+        <input type="hidden" name="selected_salary" value="{{ request('selected_salary')}}">
+        @endif
+              <select class="form-select" id="selected-department" name="selected_department" onchange="this.form.submit()">
+                <option value="" disabled {{ !request('selected_department') ? 'selected' : '' }} >Select Department</option>
+                @foreach($departments as $department)
+                <option value="{{ $department['id'] }}" {{ request('selected_department') == $department->id ? 'selected' : '' }}>
+                  {{ $department['name'] }}
+                </option>
+                @endforeach
+              </select>
+            </form>
+        
         <form class="d-flex me-2" action="{{ route('reports.teachers') }}" method="GET">
+        @if(request('selected_department'))
+          <input type="hidden" name="selected_department" value="{{ request('selected_department')}}">
+        @endif
+        @if(request('report_type'))
+        <input type="hidden" name="report_type" value="{{ request('report_type')}}">
+        @endif
+        @if(request('selected_gender'))
+      <input type="hidden" name="selected_gender" value="{{ request('selected_gender')}}">
+        @endif
+          <select class="form-select" name="selected_salary" onchange="this.form.submit()">
+            <option value="" disabled {{ !request('selected_salary') ? 'selected' : '' }}>Select Salary</option>
+            <option value="ASC" {{ request('selected_salary') == 'ASC' ? 'selected' : '' }}>ASC</option>
+            <option value="DESC" {{ request('selected_salary') == 'DESC' ? 'selected' : '' }}>DESC</option>
+          </select>
+        </form>
+
+        <form class="d-flex me-2" action="{{ route('reports.teachers') }}" method="GET">
+        @if(request('selected_department'))
+          <input type="hidden" name="selected_department" value="{{ request('selected_department')}}">
+        @endif
+        @if(request('report_type'))
+        <input type="hidden" name="report_type" value="{{ request('report_type')}}">
+        @endif
+        @if(request('selected_salary'))
+        <input type="hidden" name="selected_salary" value="{{ request('selected_salary')}}">
+        @endif
+          <select class="form-select" name="selected_gender" onchange="this.form.submit()">
+            <option value="" disabled {{ !request('selected_gender') ? 'selected' : '' }}>Select Gender</option>
+            <option value="male" {{ request('selected_gender') == 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ request('selected_gender') == 'female' ? 'selected' : '' }}>Female</option>
+          </select>
+        </form>
+
+        <form class="d-flex me-2" action="{{ route('reports.teachers') }}" method="GET">
+        @if(request('selected_department'))
+          <input type="hidden" name="selected_department" value="{{ request('selected_department')}}">
+        @endif
+        @if(request('selected_gender'))
+          <input type="hidden" name="selected_gender" value="{{ request('selected_gender')}}">
+        @endif
+        @if(request('report_type'))
+        <input type="hidden" name="selecte_salary" value="{{ request('selected_salary')}}">
+        @endif
           <select class="form-select" name="report_type" onchange="this.form.submit()">
             <option value="" disabled {{ !request('report_type') ? 'selected' : '' }}>Select Report Type</option>
             <option value="weekly" {{ request('report_type') == 'weekly' ? 'selected' : '' }}>Weekly</option>
@@ -28,6 +113,7 @@
             <option value="yearly" {{ request('report_type') == 'yearly' ? 'selected' : '' }}>Yearly</option>
           </select>
         </form>
+
         <button type="button" class="btn btn-outline-light" onclick="printReport()">
           <i class="fas fa-print me-2"></i>Print List
         </button>
@@ -37,6 +123,19 @@
 </nav>
   <div class="table-responsive">
     <table class="table table-bordered table-hover table-striped" style="text-align:center;">
+    <thead class="table-gray">
+         <tr>
+          <th colspan="2">Number Of Students</th>
+          <th></th>
+          <th colspan="2">Number Of Teachers</th>
+          <th></th>
+          <th colspan="2">Number Of Courses</th>
+          <th></th>
+          <th colspan="1">Number Of Departments</th>
+          <th></th>
+
+         </tr>
+        </thead>
       <thead class="table-dark">
         <tr>
           <th>No</th>
@@ -60,7 +159,7 @@
             <td>{{ $teacher->phone }}</td>
             <td>{{ $teacher->email }}</td>
             <td>{{ $teacher->department_name ?? 'N/A' }}</td>
-            <td>{{ $teacher->gender }}</td>
+            <td>{{ $teacher->gender }}</td> 
             <td>{{ $teacher->salary }}</td>
           </tr>
         @empty

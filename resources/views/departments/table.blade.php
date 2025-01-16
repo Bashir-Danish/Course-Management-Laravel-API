@@ -18,7 +18,7 @@
                    style="color: #007bff; cursor: pointer; margin-right: 10px; font-size: 16px;"
                    onclick="window.parent.editDepartment({{ $department->id }})" 
                    data-toggle="tooltip" title="Edit"></i>
-                <i class="fa fa-trash-o" aria-hidden="true" 
+                <i class="fa fa-trash" aria-hidden="true" 
                    style="color: #dc3545; cursor: pointer; font-size: 16px;"
                    onclick="window.parent.deleteDepartment({{ $department->id }})" 
                    data-toggle="tooltip" title="Trash"></i>

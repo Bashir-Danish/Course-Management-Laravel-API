@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\Teacher;
+use App\Models\Course;
 use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
     public function students(Request $request)
     {
+        $departments = Department::all(); 
+        $courses = Course::all();
         $query = DB::table('students')
             ->select(
                 'students.*',
@@ -25,7 +28,20 @@ class ReportsController extends Controller
             ->leftJoin('courses', 'registrations.course_id', '=', 'courses.id')
             ->leftJoin('departments', 'courses.department_id', '=', 'departments.id');
 
+            if ($request->has('selected_department')) {
+                $query->where('departments.id', $request->selected_department);
+          }
+          if ($request->has('selected_course')) {
+            $query->where('courses.id', $request->selected_course);
+      }   if ($request->has('selected_payment')) {
+        $query->where('registrations.status', $request->selected_payment);
+  }
+
         $reportType = $request->report_type ?? 'weekly';
+        $selectedCourse = $request->selected_course ?? '';
+        $selectedDepartment = $request->selected_department ?? '';
+        $selectedPayment = $request->selected_payment ?? '';
+
 
         switch ($reportType) {
             case 'weekly':
@@ -41,11 +57,13 @@ class ReportsController extends Controller
 
         $students = $query->get();
 
-        return view('Reports.Students-Reports', compact('students', 'reportType'));
+        return view('Reports.Students-Reports', compact('students','courses','departments', 'reportType', 'selectedDepartment','selectedPayment', 'selectedCourse'));
     }
 
     public function teachers(Request $request)
     {
+        $departments = Department::all(); 
+
         $query = Teacher::select('teachers.*')
                         ->selectRaw('GROUP_CONCAT(departments.name) as department_name')
                         ->leftJoin('teacher_departments', 'teachers.id', '=', 'teacher_departments.teacher_id')
@@ -63,7 +81,22 @@ class ReportsController extends Controller
                             'teachers.updated_at'
                         );
 
+                        if ($request->has('selected_department')) {
+                            $query->where('departments.id', $request->selected_department);
+                      }
+                      if ($request->has('selected_gender')) {
+                        $query->where('teachers.gender', $request->selected_gender);
+                  }
+                  if ($request->has('selected_salary')) {
+                    $query->orderBy('teachers.salary', $request->selected_salary);
+              }
+
+
         $reportType = $request->report_type ?? 'weekly';
+        $selectedDepartment = $request->selected_department ?? '';
+        $selectedGender = $request->selected_gender ?? '';
+        $selectedSalary = $request->selected_salary ?? '';
+        
 
         switch ($reportType) {
             case 'weekly':
@@ -79,16 +112,23 @@ class ReportsController extends Controller
 
         $teachers = $query->get();
 
-        return view('Reports.Teachers-Reports', compact('teachers', 'reportType'));
+     
+        return view('Reports.Teachers-Reports', compact('teachers', 'reportType','departments','selectedSalary','selectedDepartment','selectedGender'));
     }
 
     public function courses(Request $request)
     {
+        $departments = Department::all(); 
+
         $query = DB::table('courses')
             ->select('courses.*', 'departments.name as department_name')
             ->leftJoin('departments', 'courses.department_id', '=', 'departments.id');
 
+            if ($request->has('selected_department')) {
+                $query->where('courses.department_id', $request->selected_department);
+          }
         $reportType = $request->report_type ?? 'weekly';
+        $selectedDepartment = $request->selected_department ?? '';
 
         switch ($reportType) {
             case 'weekly':
@@ -101,10 +141,11 @@ class ReportsController extends Controller
                 $query->whereBetween('courses.created_at', [now()->subYear(), now()]);
                 break;
         }
+        
 
         $courses = $query->get();
 
-        return view('Reports.Course-Reports', compact('courses', 'reportType'));
+        return view('Reports.Course-Reports', compact('courses','departments', 'reportType','selectedDepartment'));
     }
 
     public function departments(Request $request)

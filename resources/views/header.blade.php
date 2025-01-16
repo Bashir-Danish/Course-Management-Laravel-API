@@ -59,7 +59,7 @@
                               role="button"
                               aria-expanded="false"
                               class="nav-link dropdown-toggle">
-                              <img src="<?php echo 'img/profile/teache.jpg';?>" alt="" />
+                              <img src="{{ asset('img/profile/teache.jpg') }}" alt=""/>
                               <span class="admin-name">Admin Panel</span>
                               <i
                                 class="fa fa-angle-down edu-icon edu-down-arrow"
@@ -68,9 +68,11 @@
                             <ul
                               role="menu"
                               class="dropdown-header-top author-log dropdown-menu animated zoomIn">
-                              <li id="admin">
-                                <a onclick="openModal();"><span class="edu-icon edu-home-admin author-log-ic"></span>My Account</a>
-                              </li>
+                              @if(auth('admin')->user()->role === 'super_admin')
+                                <li id="admin">
+                                    <a onclick="openModal();"><span class="edu-icon edu-home-admin author-log-ic"></span>My Account</a>
+                                </li>
+                              @endif
                               <li>
                                 <a href="#"><span class="edu-icon edu-settings author-log-ic"></span>Settings</a>
                               </li>

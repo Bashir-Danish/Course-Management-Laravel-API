@@ -19,7 +19,7 @@ class AdminAuthController extends Controller
                 'last_name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:admins',
                 'password' => 'required|string|min:6',
-                'role' => 'required|string|in:admin'
+                'role' => 'sometimes|string|in:super_admin,employee'
             ]);
 
             if ($validator->fails()) {
@@ -35,7 +35,7 @@ class AdminAuthController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'role' => $request->role
+                'role' => $request->role ?? 'employee'
             ]);
 
             // Generate token for the new admin

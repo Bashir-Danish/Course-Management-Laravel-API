@@ -1,3 +1,4 @@
+<!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
 <table id="tbl" style="border-collapse: collapse;">
     <thead>
         <tr>
@@ -15,7 +16,7 @@
         <tr>
             <td style="padding: 10px;">{{ $course->id }}</td>
             <td style="padding: 10px;">{{ $course->name }}</td>
-            <td style="padding: 10px;">{{ number_format($course->fees, 2) }}</td>
+            <td style="padding: 10px;">{{ number_format($course->fees, 2) }}</td> 
             <td style="padding: 10px;">{{ $course->duration }}</td>
             <td style="padding: 10px;">{{ $course->department->name }}</td>
             <td style="padding: 10px;" class="time-slots-cell">
@@ -23,7 +24,7 @@
                     $rawSlots = $course->available_time_slots;
                     $decodedSlots = is_string($rawSlots) ? json_decode($rawSlots, true) : $rawSlots;
                     $decodedSlots = is_array($decodedSlots) ? $decodedSlots : [];
-                @endphp
+                @endphp 
                 
                 <span class="time-slots-summary">{{ count($decodedSlots) }} slots</span>
                 <div class="time-slots-tooltip">
@@ -67,8 +68,10 @@
                 <i class="fa fa-pencil-square-o" aria-hidden="true" 
                    style="color: #007bff; cursor: pointer; margin-right: 10px; font-size: 16px;"
                    onclick="editCourse({{ $course->id }})" 
-                   data-toggle="tooltip" title="Edit"></i>
-                <i class="fa fa-trash-o" aria-hidden="true" 
+                   data-toggle="tooltip" title="Edit">
+                </i>
+
+                <i class="fa fa-trash" aria-hidden="true" 
                    style="color: #dc3545; cursor: pointer; font-size: 16px;"
                    onclick="deleteCourse({{ $course->id }})" 
                    data-toggle="tooltip" title="Trash"></i>

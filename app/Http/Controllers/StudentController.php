@@ -51,21 +51,27 @@ class StudentController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|min:2|max:50',
                 'last_name' => 'required|string|min:2|max:50',
-                'phone' => 'nullable|string|min:10|max:15',
+                'phone' => [
+                    'required',
+                    'string',
+                    Rule::unique('students','phone'),
+                ],
+                // 'phone' => 'nullable|string|min:10|max:15',
                 'address' => 'nullable|string|min:5|max:200',
                 'gender' => 'required|in:Male,Female',
                 'dob' => 'required|date',
+
             ]);
 
             \Log::info('Validation passed, validated data:', $validated);
 
             $student = Student::create([
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'phone' => $validated['phone'],
-                'address' => $validated['address'],
-                'gender' => $validated['gender'],
-                'dob' => $validated['dob'],
+                'first_name' => $validated['first_name'], 
+                'last_name' => $validated['last_name'], 
+                'phone' => $validated['phone'], 
+                'address' => $validated['address'], 
+                'gender' => $validated['gender'], 
+                'dob' => $validated['dob'], 
             ]);
 
             \Log::info('Student created successfully:', $student->toArray());
@@ -180,7 +186,7 @@ class StudentController extends Controller
                 ->map(function($course) {
                     return [
                         'id' => $course->id,
-                        'name' => $course->name . ' ($' . number_format($course->fees, 2) . ')',
+                        'name' => $course->name . ' (' . number_format($course->fees, 2) . ')',
                         'fees' => $course->fees,
                         'available_time_slots' => $course->getRawOriginal('available_time_slots')
                     ];

@@ -21,6 +21,28 @@ class Course extends Model
         'available_time_slots' => 'array'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($course) {
+            // Normalize duration format
+            if ($course->duration) {
+                $duration = strtolower(trim($course->duration));
+                
+                // Fix common typos
+                $duration = str_replace('mounth', 'month', $duration);
+                
+                // Ensure proper format
+                if (preg_match('/^(\d+)\s*(month|year|day|week)s?$/i', $duration, $matches)) {
+                    $number = $matches[1];
+                    $unit = $matches[2];
+                    $course->duration = $number . ' ' . $unit . ($number > 1 ? 's' : '');
+                }
+            }
+        });
+    }
+
     public function department()
     {
         return $this->belongsTo(Department::class);

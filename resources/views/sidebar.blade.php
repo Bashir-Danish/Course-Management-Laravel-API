@@ -2,14 +2,14 @@
       <nav id="sidebar" class="">
         <div class="sidebar-header">
           <a href="#"><h2 id="head"><span id="title-1">Nano</span><span id="title-2">Net</span></h2></a>
-          <strong><a href="{{ route('dashboard') }}"><img src="img/logo/logosn.png" alt="" /></a></strong>
+          <strong><a href="{{ route('dashboard') }}"><img src="{{ asset('img/logo/logosn.png') }}"/></a></strong>
         </div>
         <div class="left-custom-menu-adp-wrap comment-scrollbar">
             <br><hr><br>
           <nav class="sidebar-nav left-sidebar-menu-pro">
             <ul class="metismenu" id="menu1">
               <li class="active" title="Dashboard">
-                <a class="" href="{{ route('dashboard') }}">
+                <a class="" href="{{ route('dashboard') }}"> 
                   <!-- <span class="educate-icon educate-home icon-wrap"></span> -->
                   <svg height="20" width="20" fill="#323232" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="dashboard" class="icon glyph"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="2" y="2" width="9" height="11" rx="2"></rect><rect x="13" y="2" width="9" height="7" rx="2"></rect><rect x="2" y="15" width="9" height="7" rx="2"></rect><rect x="13" y="11" width="9" height="11" rx="2"></rect></g></svg>
                   <span class="mini-click-non">Dashboard</span>
@@ -94,12 +94,14 @@
                 </ul>
               </li>
 
-              <li>
-                <a class="" href="{{ route('backup') }}" aria-expanded="false" title="Backup">
-                <svg width="20" height="20" fill="#323232" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>backup-solid-badged</title> <path class="clr-i-solid--badged clr-i-solid-path-1--badged" d="M18,19.84l6.38-6.35A1,1,0,1,0,23,12.08L19,16V4a1,1,0,1,0-2,0V16l-4-3.95a1,1,0,0,0-1.41,1.42Z"></path><path class="clr-i-solid--badged clr-i-solid-path-2--badged" d="M16.58,21.26,10.2,14.91A3,3,0,0,1,9.44,12H7.07a1.92,1.92,0,0,0-1.9,1.32C2.86,19.68,2.24,21.43,2.07,22H17.33Z"></path><path class="clr-i-solid--badged clr-i-solid-path-3--badged" d="M2,24v6a2,2,0,0,0,2,2H32a2,2,0,0,0,2-2V24Zm28,4H26V26h4Z"></path><path class="clr-i-solid--badged clr-i-solid-path-4--badged" d="M18.66,22H33.93c-.17-.57-.79-2.3-3.06-8.55a7.55,7.55,0,0,1-.87.05,7.46,7.46,0,0,1-3.35-.8,3,3,0,0,1-.86,2.21l-6.38,6.35Z"></path><circle class="clr-i-solid--badged clr-i-solid-path-5--badged clr-i-badge" cx="30" cy="6" r="5"></circle> <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> </g></svg>
-                  <span class="mini-click-non">Backup</span>
-                </a>
-              </li>
+              @if(auth('admin')->user()->role === 'super_admin')
+                  <li>
+                    <a href="{{ route('backup') }}">
+                    <svg width="20" height="20" fill="#323232" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>backup-solid-badged</title> <path class="clr-i-solid--badged clr-i-solid-path-1--badged" d="M18,19.84l6.38-6.35A1,1,0,1,0,23,12.08L19,16V4a1,1,0,1,0-2,0V16l-4-3.95a1,1,0,0,0-1.41,1.42Z"></path><path class="clr-i-solid--badged clr-i-solid-path-2--badged" d="M16.58,21.26,10.2,14.91A3,3,0,0,1,9.44,12H7.07a1.92,1.92,0,0,0-1.9,1.32C2.86,19.68,2.24,21.43,2.07,22H17.33Z"></path><path class="clr-i-solid--badged clr-i-solid-path-3--badged" d="M2,24v6a2,2,0,0,0,2,2H32a2,2,0,0,0,2-2V24Zm28,4H26V26h4Z"></path><path class="clr-i-solid--badged clr-i-solid-path-4--badged" d="M18.66,22H33.93c-.17-.57-.79-2.3-3.06-8.55a7.55,7.55,0,0,1-.87.05,7.46,7.46,0,0,1-3.35-.8,3,3,0,0,1-.86,2.21l-6.38,6.35Z"></path><circle class="clr-i-solid--badged clr-i-solid-path-5--badged clr-i-badge" cx="30" cy="6" r="5"></circle> <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> </g></svg>
+                      <span class="mini-click-non">Backup</span>
+                    </a>
+                  </li>
+              @endif
               <li>
                 <a onclick="showPopup()" title="Reports" href="#" aria-expanded="false">
                 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="#323232" viewBox="0 0 36 36"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="6.48" y="18" width="5.76" height="11.52" rx="1" ry="1"></rect><rect x="15.12" y="6.48" width="5.76" height="23.04" rx="1" ry="1"></rect><rect x="23.76" y="14.16" width="5.76" height="15.36" rx="1" ry="1"></rect></g></svg>

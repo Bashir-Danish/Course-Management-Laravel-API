@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Teacher;
 use App\Models\Department;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class TeacherController extends Controller
                 'email' => [
                     'required',
                     'email',
-                    Rule::unique('teachers', 'email'),
+                    Rule::unique('teachers', 'email'), 
                 ],
                 'phone' => 'required|string|min:10|max:15',
                 'address' => 'required|string|min:5|max:200',
@@ -119,7 +120,7 @@ class TeacherController extends Controller
                 'email' => [
                     'required',
                     'email',
-                    Rule::unique('teachers')->ignore($teacher->id),
+                    Rule::unique('teachers')->ignore($teacher->id), 
                 ],
                 'phone' => 'required|string|min:10|max:15',
                 'address' => 'required|string|min:5|max:200',
@@ -129,6 +130,7 @@ class TeacherController extends Controller
                 'salary' => 'required|numeric|min:0',
             ]);
 
+            // let you store important information when program is run 
             \Log::info('Update validated data:', $validated);
 
             $teacher->update([

@@ -19,6 +19,7 @@
     <div class="collapse navbar-collapse" id="mynavbar">
       <ul class="navbar-nav me-auto">
       </ul>
+
       <div class="d-flex align-items-center">
         <form class="d-flex me-2" action="{{ route('reports.departments') }}" method="GET">
           <select class="form-select" name="report_type" onchange="this.form.submit()">
@@ -37,6 +38,19 @@
 </nav> 
   <div class="table-responsive">
     <table class="table table-bordered table-hover table-striped" style="text-align:center;">
+    <thead class="table-gray">
+         <tr>
+          <th colspan="2">Number Of Students</th>
+          <th></th>
+          <th colspan="2">Number Of Teachers</th>
+          <th></th>
+          <th colspan="2">Number Of Courses</th>
+          <th></th>
+          <th colspan="1">Number Of Departments</th>
+          <th></th>
+
+         </tr>
+        </thead>
       <thead class="table-dark">
         <tr>
           <th>No</th>

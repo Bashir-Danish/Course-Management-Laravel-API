@@ -21,8 +21,8 @@
                         echo trim($timeSlot, '[]"');
                     @endphp
                 </td>
-                <td>${{ number_format($registration->fees_total, 2) }}</td>
-                <td>${{ number_format($registration->fees_paid, 2) }}</td>
+                <td>{{ number_format($registration->fees_total, 2) }}</td>
+                <td>{{ number_format($registration->fees_paid, 2) }}</td>
                 <td>{{ $registration->status }}</td>
                 <td>
                     <button class="btn btn-sm text-primary border-0" 

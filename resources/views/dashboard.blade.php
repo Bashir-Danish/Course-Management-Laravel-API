@@ -4,6 +4,7 @@
      <!--================================================= Head Part ==================================================== -->
      @include('head')
      <!--================================================================================================================ -->
+     
   </head>
   <body>
     <!-- ================================================ Left Sidebar ================================================================ -->
@@ -21,7 +22,6 @@
           </div>
         </div>
      </div>
-
         <!-- header section --->
         @include('header')
         <!-- Mobile Menu start -->
@@ -55,88 +55,97 @@
     </div>
 </div>
 
-<!-- Slideshow -->
+
 <div class="slideshow-container">
-    <div class="mySlides fade">
-        <div class="numbertext">1 / 11</div>
-        <img src="img/22.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">2 / 11</div>
-        <img src="img/33.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">3 / 11</div>
-        <img src="img/44.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">4 / 11</div>
-        <img src="img/55.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">5 / 11</div>
-        <img src="img/66.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">6 / 11</div>
-        <img src="img/77.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">7 / 11</div>
-        <img src="img/88.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">8 / 11</div>
-        <img src="img/99.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">9 / 11</div>
-        <img src="img/10.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">10 / 11</div>
-        <img src="img/12.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">11/ 11</div>
-        <img src="img/13.jpg" alt="" style="height:72vh; width:100%;"/>
-        <div class="text1"></div>
-    </div>
-</div>
-
-<div style="text-align:center">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-</div>
+        <!-- Slides -->
+        <div class="slide active">
+          <img src="img/10.jpg" alt="Slide 1">
+        </div>
+        <div class="slide">
+          <img src="img/22.jpg" alt="Slide 2">
+        </div>
+        <div class="slide">
+          <img src="img/33.jpg" alt="Slide 3">
+        </div>
+        <div class="slide">
+          <img src="img/44.jpg" alt="Slide 4">
+        </div>
+        <div class="slide">
+          <img src="img/55.jpg" alt="Slide 5">
+        </div>
+        <div class="slide">
+          <img src="img/66.jpg" alt="Slide 6">
+        </div>
+        <div class="slide">
+          <img src="img/77.jpg" alt="Slide 7">
+        </div>
+        <div class="slide">
+          <img src="img/77.jpg" alt="Slide 8">
+        </div>
+        <div class="slide">
+          <img src="img/88.jpg" alt="Slide 9">
+        </div>
+      
+      </div>
+      
+      <!-- Dots (Indicators) -->
+      <div class="dots">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+        <span class="dot" onclick="currentSlide(5)"></span>
+        <span class="dot" onclick="currentSlide(6)"></span>
+        <span class="dot" onclick="currentSlide(7)"></span>
+        <span class="dot" onclick="currentSlide(8)"></span>
+        <span class="dot" onclick="currentSlide(9)"></span>
+      </div>
+      
+      <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".dot");
+      
+        function showSlides() {
+          slides.forEach((slide, index) => {
+            slide.classList.remove("active");
+          });
+          dots.forEach(dot => dot.classList.remove("active"));
+      
+          slideIndex++;
+          if (slideIndex > slides.length) { slideIndex = 1; }
+      
+          slides[slideIndex - 1].classList.add("active");
+          dots[slideIndex - 1].classList.add("active");
+      
+          setTimeout(showSlides, 5000); // Change slide every 3 seconds
+        }
+      
+      
+        function changeSlide(n) {
+          slideIndex += n;
+          if (slideIndex < 1) { slideIndex = slides.length; }
+          if (slideIndex > slides.length) { slideIndex = 1; }
+          updateSlide();
+        }
+      
+        function currentSlide(n) {
+          slideIndex = n;
+          updateSlide();
+        }
+      
+        function updateSlide() {
+          slides.forEach((slide, index) => {
+            slide.classList.remove("active");
+          });
+          dots.forEach(dot => dot.classList.remove("active"));
+          slides[slideIndex - 1].classList.add("active");
+          dots[slideIndex - 1].classList.add("active");
+        }
+      
+        // Initialize auto-play
+        showSlides();
+      </script>
 
 <!-- ================================================= Admin Panel ==================================================== -->
     @include('Admin_panel')

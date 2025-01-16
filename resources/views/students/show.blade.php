@@ -2,6 +2,9 @@
 <html class="no-js" lang="en">
   <head>
      @include('head')
+
+     <!-- ==========================  =================================-->
+
      <script>
      window.WOW = function() {
          return {
@@ -100,7 +103,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                          <label class="text-muted" style="width:fit-content">Course Fee: Afg<span id="course_fee">0.00</span></label>
+                                          <label class="text-muted" style="width:fit-content">Course Fees: Afg<span id="course_fee">0.00</span></label>
                                         </div>
                                         <div style="display:flex; align-items:baseline">
                                             <label for="time_slot">Time Slot:</label>
@@ -153,6 +156,8 @@
         loadRegistrations();
     });
 
+    
+    
     document.getElementById('course_id').addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         console.log('Selected course time slots:', {
@@ -164,6 +169,8 @@
         
         document.getElementById('course_fee').textContent = courseFee;
         document.getElementById('fees_paid').max = courseFee;
+        console.log(courseFee);
+        
 
         timeSlotSelect.innerHTML = '<option value="">Select Time</option>';
         timeSlotSelect.disabled = !this.value;
@@ -270,6 +277,8 @@
                 showNotification('Please select a time slot', 'danger');
                 return;
             }
+            const feesPaidValue = document.getElementById('fees_paid').value;
+
 
             const formData = {
                 student_id: {{ $student->id }},
@@ -277,11 +286,10 @@
                 time_slot: JSON.stringify([timeSlot]),
                 fees_total: parseFloat(document.getElementById('course_fee').textContent),
                 registration_date: new Date().toISOString().split('T')[0],
-                status: parseFloat(document.getElementById('course_fee').textContent) > parseFloat(document.getElementById('fees_paid').textContent) ?  'Unpaid' : "Paid",
+                status: parseFloat(document.getElementById('course_fee').innerHTML) > feesPaidValue ?  'Unpaid' : "Paid",
                 _token: '{{ csrf_token() }}'
             };
 
-            const feesPaidValue = document.getElementById('fees_paid').value;
             if (this.dataset.editingId) {
                 if (feesPaidValue.trim()) {
                     formData.fees_paid = parseFloat(feesPaidValue);
@@ -422,7 +430,7 @@
         const feesPaidInput = document.getElementById('fees_paid');
         feesPaidInput.value = '';
         feesPaidInput.required = false; 
-        feesPaidInput.placeholder = `Current paid: $${registration.fees_paid} (optional)`;
+        feesPaidInput.placeholder = `Current paid: ${registration.fees_paid} (optional)`;
         
         document.getElementById('course_fee').textContent = registration.fees_total.toFixed(2);
         

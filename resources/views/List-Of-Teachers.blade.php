@@ -77,7 +77,8 @@
                                 <i class="fa fa-trash-o" aria-hidden="true" 
                                    style="color: #dc3545; cursor: pointer; font-size: 16px;"
                                    onclick="deleteTeacher({{ $teacher->id }})" 
-                                   data-toggle="tooltip" title="Trash"></i>
+                                   data-toggle="tooltip" title="Trash">
+                                </i>
                             </td>
                         </tr>
                         @empty
@@ -172,6 +173,21 @@
         }
     });
 
+    function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type}`;
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.zIndex = '1000';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
     function deleteTeacher(id) {
         if (confirm('Are you sure you want to delete this teacher?')) {
             fetch(`{{ url('teachers') }}/${id}`, {
@@ -186,6 +202,8 @@
             .then(data => {
                 if (data.success) {
                     loadTeachers();
+                showNotification('Teacher deleted successfully');
+
                 } else {
                     throw new Error(data.message || 'Error deleting teacher');
                 }

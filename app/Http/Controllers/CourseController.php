@@ -53,6 +53,7 @@ class CourseController extends Controller
         $departments = Department::all();
         return view('Add-Course', compact('departments'));
     }
+    
 
     public function store(Request $request)
     {
@@ -63,14 +64,14 @@ class CourseController extends Controller
                     'string',
                     'min:2',
                     'max:100',
-                    Rule::unique('courses', 'name'),
+                    Rule::unique('courses', 'name'), 
                 ],
                 'fees' => 'required|numeric|min:0',
                 'duration' => 'required|string|max:50',
                 'department_id' => 'required|exists:departments,id',
                 'available_time_slots' => 'required|array|min:1',
             ]);
-
+ 
             $course = Course::create([
                 'name' => $validated['name'],
                 'fees' => $validated['fees'],

@@ -60,7 +60,7 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
         .form-container {
-            width: 400px;
+            width: 600px;
             padding: 40px;
             background: rgba(255, 255, 255, 0.08);
             -webkit-backdrop-filter: blur(5px);
@@ -83,6 +83,9 @@
             padding: 0 20px;
             transition: opacity 0.3s ease-in-out;
         }
+        #loginForm{
+            padding:10px;
+        }
         .signup-form {
             opacity: 0;
         }
@@ -98,10 +101,11 @@
         h2 {
             text-align: center;
             margin-bottom: 30px;
-            font-size: 28px;
+            font-size: 38px;
         }
         .input-group {
             margin-bottom: 20px;
+         
         }
         .input-group input {
             width: 100%;
@@ -185,23 +189,23 @@
             <div class="forms">
                 <!-- Login Form -->
                 <div class="login-form">
-                    <h2>Login</h2>
+                    <h2 style="margin-bottom: 10vh;">Login</h2>
                     <form id="loginForm" action="{{ route('login') }}" method="POST">
                         @csrf
-                        <div class="input-group">
+                        <div class="input-group"> 
                             <input type="email" name="email" placeholder="Email" required>
-                            <div class="error-message"></div>
+                            <!-- <div class="error-message"></div> -->
                         </div>
                         <div class="input-group">
                             <input type="password" name="password" placeholder="Password" required>
                             <div class="error-message"></div>
                         </div>
-                        <div class="remember-forgot">
+                        <!-- <div class="remember-forgot">
                             <label>
                                 <input type="checkbox" name="remember"> Remember me
                             </label>
                             <a href="#">Forgot Password?</a>
-                        </div>
+                        </div> -->
                         <button type="submit" class="btn">Sign In</button>
                         <div class="signup-link">
                             Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a>
@@ -230,7 +234,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                             <div class="error-message"></div>
                         </div>
-                        <button type="submit" class="btn">Sign Up</button>
+                        <button type="submit" class="btn" onclick="">Sign Up</button>
                         <div class="signup-link">
                             Already have an account? <a href="#" onclick="showLogin()">Login</a>
                         </div>
@@ -270,8 +274,9 @@
 
     function clearErrors() {
         document.querySelectorAll('.error-message').forEach(div => {
-            div.textContent = '';
+            div.textContent = ' ';
         });
+        // alert("Your Input Data is Incorrect");
     }
 
     document.querySelectorAll('form').forEach(form => {
@@ -310,7 +315,7 @@
             .catch(error => {
                 console.error('Error:', error);
                 const firstError = this.querySelector('.error-message');
-                firstError.textContent = 'An error occurred. Please try again.';
+                firstError.textContent = 'Your email or pass is Incorrect. Please try again.';
             });
         });
     });
@@ -318,6 +323,52 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'ArrowLeft') showLogin();
         if (e.key === 'ArrowRight') showSignup();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const signupForm = document.querySelector('.signup-form');
+        
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear previous error messages
+            this.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            const formData = new FormData(this);
+            
+            fetch('{{ route("register") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    if (data.errors) {
+                        Object.entries(data.errors).forEach(([field, messages]) => {
+                            const input = this.querySelector(`[name="${field}"]`);
+                            if (input) {
+                                const errorDiv = input.nextElementSibling;
+                                errorDiv.textContent = messages[0];
+                            }
+                        });
+                    } else if (data.message) {
+                        const firstError = this.querySelector('.error-message');
+                        firstError.textContent = data.message;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const firstError = this.querySelector('.error-message');
+                firstError.textContent = 'Registration failed. Please try again.';
+            });
+        });
     });
     </script>
 </body>

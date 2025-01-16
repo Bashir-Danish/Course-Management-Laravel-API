@@ -30,7 +30,7 @@
                    style="color: #007bff; cursor: pointer; margin-right: 10px; font-size: 16px;"
                    onclick="editStudent({{ $student->id }})" 
                    data-toggle="tooltip" title="Edit"></i>
-                <i class="fa fa-trash-o" aria-hidden="true" 
+                <i class="fa fa-trash" aria-hidden="true" 
                    style="color: #dc3545; cursor: pointer; font-size: 16px;"
                    onclick="deleteStudent({{ $student->id }})" 
                    data-toggle="tooltip" title="Trash"></i>
@@ -116,20 +116,20 @@
     margin: 0 2px;
 }
 
-.page-link {
+.page-link { 
     padding: 8px 12px;
     border: 1px solid #dee2e6;
     color: #007bff;
     text-decoration: none;
     background-color: #fff;
 }
-
+ 
 .page-item.active .page-link {
     background-color: #007bff;
     color: white;
     border-color: #007bff;
 }
-
+ 
 .page-item.disabled .page-link {
     color: #6c757d;
     pointer-events: none;

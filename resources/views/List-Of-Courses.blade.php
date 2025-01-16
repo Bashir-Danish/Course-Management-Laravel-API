@@ -10,7 +10,7 @@
         </div>
     </div>
 </div>
-
+<hr>
 <!-- Main Content -->
 <div class="table_123" >
     <div class="table123_haeder">
@@ -113,16 +113,16 @@ loadCourses();
 </script>
 
 <style>
-.time-slots-cell {
+.time-slots-cell { 
     position: relative;
 }
 
-.time-slots-summary {
+.time-slots-summary { 
     cursor: pointer;
     color: #007bff;
 }
 
-.time-slots-tooltip {
+.time-slots-tooltip { 
     display: none;
     position: absolute;
     background: white;
@@ -138,15 +138,15 @@ loadCourses();
     margin-top: 5px;
 }
 
-.time-slot-group {
+.time-slot-group { 
     margin-bottom: 10px;
 }
 
-.time-slot-group:last-child {
+.time-slot-group:last-child { 
     margin-bottom: 0;
 }
 
-.time-slot-header {
+.time-slot-header { 
     font-weight: bold;
     color: #007bff;
     padding: 5px 0;
@@ -154,28 +154,28 @@ loadCourses();
     border-bottom: 1px solid #eee;
 }
 
-.time-slot-item {
+.time-slot-item { 
     padding: 3px 0;
     padding-left: 10px;
     color: #666;
 }
 
-.time-slot-item:hover {
+.time-slot-item:hover { 
     background-color: #f8f9fa;
 }
 
-.time-slots-cell:hover .time-slots-tooltip {
+.time-slots-cell:hover .time-slots-tooltip { 
     display: block;
 }
 
-.badge {
+.badge { 
     padding: 5px 10px;
     border-radius: 15px;
     margin: 2px;
     display: inline-block;
     font-size: 12px;
 }
-.bg-primary {
+.bg-primary { 
     background-color: #007bff;
     color: white;
 }

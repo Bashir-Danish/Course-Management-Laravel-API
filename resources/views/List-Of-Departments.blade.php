@@ -29,7 +29,7 @@
         @include('Mobile_menu')
         
           <!-- =================================== The Main Part ============================================== -->
-         <!-- <hr> -->
+         <hr>
           <div class="table_123" >
             <div class="table123_haeder">
                 <h4 id="hh2">List Of Departments</h4>
@@ -61,7 +61,7 @@
     <!--========================================================================================================================== -->
 
     <script>
-    function loadDepartments(url) {
+    function loadDepartments(url) { 
         url = url || '{{ route("departments.index") }}';
         fetch(url, {
             headers: {
@@ -72,20 +72,20 @@
         .then(html => {
             document.getElementById('departments-table').innerHTML = html;
         });
-    }
+    } 
 
     loadDepartments();
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function(e) { 
         if (e.target.matches('.pagination a')) {
             e.preventDefault();
             loadDepartments(e.target.href);
         }
-    });
+    }); 
 
     let searchTimeout;
-    document.getElementById('tx').addEventListener('keyup', function() {
-        clearTimeout(searchTimeout);
+    document.getElementById('tx').addEventListener('keyup', function() { 
+        clearTimeout(searchTimeout); 
         const searchText = this.value.toLowerCase();
         
         if (searchText.length >= 3 || searchText.length === 0) {
@@ -96,6 +96,21 @@
             }, 500); 
         }
     });
+
+    function showNotification(message, type = 'success') { 
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type}`;
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.zIndex = '1000';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
 
     function deleteDepartment(id) {
         if (confirm('Are you sure you want to delete this department?')) {
@@ -111,6 +126,8 @@
             .then(data => {
                 if (data.success) {
                     loadDepartments();
+                showNotification('Department deleted successfully');
+
                 } else {
                     throw new Error(data.message || 'Error deleting department');
                 }

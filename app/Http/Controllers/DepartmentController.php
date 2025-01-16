@@ -10,7 +10,7 @@ class DepartmentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Department::oldest();
+        $query = Department::oldest(); 
         
         if ($request->has('search') && strlen($request->search) >= 3) {
             $searchTerm = $request->search;
@@ -78,7 +78,7 @@ class DepartmentController extends Controller
                 'name.unique' => 'This Department name already exists.',
             ]);
 
-            $department = Department::create($validated);
+            $department = Department::create($validated); 
 
             return response()->json([
                 'success' => true,
