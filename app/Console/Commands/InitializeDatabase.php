@@ -199,7 +199,8 @@ class InitializeDatabase extends Command
                 $table->string('last_name');
                 $table->string('email')->unique();
                 $table->string('password');
-                $table->string('role');
+                $table->enum('role', ['super_admin', 'employee']);
+                $table->string('profile_image')->nullable()->default('default-profile.png');
                 $table->timestamps();
             });
             $this->info('Created admins table');
@@ -215,7 +216,7 @@ class InitializeDatabase extends Command
                 'last_name' => 'User',
                 'email' => 'admin@example.com',
                 'password' => bcrypt('password'),
-                'role' => 'admin',
+                'role' => 'super_admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
