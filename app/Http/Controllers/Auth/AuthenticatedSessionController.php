@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Admin;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 { 
@@ -23,22 +24,38 @@ class AuthenticatedSessionController extends Controller
                 'email' => ['required', 'email'],
                 'password' => ['required'],
             ]);
-
-            // Find admin by email
             $admin = Admin::where('email', $credentials['email'])->first();
 
-            if ($admin && Hash::check($credentials['password'], $admin->password)) {
-                Auth::guard('admin')->login($admin, $request->boolean('remember'));
-                $request->session()->regenerate();
-
-                return response()->json([
-                    'success' => true,
-                    'redirect' => route('dashboard')
+            if (!$admin) {
+                Log::warning('Login attempt failed - Admin not found: ' . $credentials['email']);
+                throw ValidationException::withMessages([
+                    'email' => ['These credentials do not match our records.'],
                 ]);
             }
 
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+            Log::debug('Login attempt details:', [
+                'email' => $credentials['email'],
+                'submitted_password_length' => strlen($credentials['password']),
+                'stored_password_hash_length' => strlen($admin->password),
+                'stored_hash_starts_with' => substr($admin->password, 0, 7)
+            ]);
+
+            if (!Hash::check($credentials['password'], $admin->password)) {
+                Log::warning('Login attempt failed - Invalid password for: ' . $credentials['email']);
+                throw ValidationException::withMessages([
+                    'email' => ['These credentials do not match our records.'],
+                ]);
+            }
+
+            Auth::guard('admin')->login($admin, $request->boolean('remember'));
+            $request->session()->regenerate();
+
+            Log::info('Admin logged in successfully: ' . $admin->email);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful',
+                'redirect' => route('dashboard')
             ]);
 
         } catch (ValidationException $e) {
@@ -47,9 +64,11 @@ class AuthenticatedSessionController extends Controller
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
+            Log::error('Login error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred during login.',
+                'debug' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }
     }

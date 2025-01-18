@@ -33,13 +33,15 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('branches', BranchController::class);
     
     // Reports routes accessible by both roles
-    Route::get('/reports/weekly', [ReportController::class, 'weekly'])->name('reports.weekly');
-    Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
-    Route::get('/reports/yearly', [ReportController::class, 'yearly'])->name('reports.yearly');
-    Route::get('/reports/students', [ReportsController::class, 'students'])->name('reports.students');
-    Route::get('/reports/teachers', [ReportsController::class, 'teachers'])->name('reports.teachers');
-    Route::get('/reports/courses', [ReportsController::class, 'courses'])->name('reports.courses');
-    Route::get('/reports/departments', [ReportsController::class, 'departments'])->name('reports.departments');
+    Route::middleware([\App\Http\Middleware\CheckAdminRole::class.':super_admin'])->group(function () {
+        Route::get('/reports/weekly', [ReportController::class, 'weekly'])->name('reports.weekly');
+        Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
+        Route::get('/reports/yearly', [ReportController::class, 'yearly'])->name('reports.yearly');
+        Route::get('/reports/students', [ReportsController::class, 'students'])->name('reports.students');
+        Route::get('/reports/teachers', [ReportsController::class, 'teachers'])->name('reports.teachers');
+        Route::get('/reports/courses', [ReportsController::class, 'courses'])->name('reports.courses');
+        Route::get('/reports/departments', [ReportsController::class, 'departments'])->name('reports.departments');
+    });
 
     // Routes only accessible by super_admin
     Route::middleware([\App\Http\Middleware\CheckAdminRole::class.':super_admin'])->group(function () {
@@ -48,4 +50,23 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/api/profile', [ProfileController::class, 'getProfile'])->name('profile.get');
         Route::post('/api/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
     });
+});
+
+// Add this route temporarily for setup
+Route::get('/setup-admin', function() {
+    $admin = \App\Models\Admin::updateOrCreate(
+        ['email' => 'admin@admin.com'],
+        [
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+            'role' => 'super_admin'
+        ]
+    );
+    
+    return response()->json([
+        'success' => true,
+        'message' => 'Admin account has been created/updated',
+        'email' => $admin->email
+    ]);
 });

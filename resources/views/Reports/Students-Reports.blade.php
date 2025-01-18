@@ -142,6 +142,42 @@
         </div>
       </div>
     </nav>
+    <div class="container-fluid mt-3 mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-muted">Total Students</h5>
+                        <h2 class="card-text">{{ \App\Models\Student::count() }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-muted">Total Teachers</h5>
+                        <h2 class="card-text">{{ \App\Models\Teacher::count() }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-muted">Total Courses</h5>
+                        <h2 class="card-text">{{ \App\Models\Course::count() }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-muted">Total Departments</h5>
+                        <h2 class="card-text">{{ \App\Models\Department::count() }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-bordered table-hover table-striped" style="text-align:center;">
         <thead class="table-gray">

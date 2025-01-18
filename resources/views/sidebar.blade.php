@@ -102,12 +102,15 @@
                     </a>
                   </li>
               @endif
+              
+              @if(auth('admin')->user()->role === 'super_admin')
               <li>
                 <a onclick="showPopup()" title="Reports" href="#" aria-expanded="false">
                 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="#323232" viewBox="0 0 36 36"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="6.48" y="18" width="5.76" height="11.52" rx="1" ry="1"></rect><rect x="15.12" y="6.48" width="5.76" height="23.04" rx="1" ry="1"></rect><rect x="23.76" y="14.16" width="5.76" height="15.36" rx="1" ry="1"></rect></g></svg>
                   <span class="mini-click-non">Reports</span>
                 </a>
               </li>
+              @endif
 
               <!-- <li>
                 <a class="has-arrow" href="#" aria-expanded="false" title="Branches">
